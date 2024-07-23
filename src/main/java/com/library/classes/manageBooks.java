@@ -9,7 +9,7 @@ import java.util.List;
 
 
 
-public class manageBooks {
+public class ManageBooks {
 
     public List<String> getAllBooks() {
         List<String> books = new ArrayList<>();
@@ -27,6 +27,7 @@ public class manageBooks {
             System.err.println("Error during fetching books from database.");
             e.printStackTrace();
         }
+
         return books;
     }
 }
