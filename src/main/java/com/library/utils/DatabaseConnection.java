@@ -8,7 +8,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class DatabaseConnection {
     
-    private static final Dotenv dotenv = Dotenv.configure().directory(".gitignore").load();
+    private static final Dotenv dotenv = Dotenv.load();
 
     private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/library";
     private static final String USERNAME = "postgres";
