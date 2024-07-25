@@ -2,13 +2,13 @@ package com.library;
 
 import java.util.List;
 
-import com.library.dao.ManageBooks;
+import com.library.classes.books.BooksTitle;
 
 public class App {
     public static void main(String[] args) {
 
 
-        ManageBooks bookDAO = new ManageBooks();
+        BooksTitle bookDAO = new BooksTitle();
 
         // Fetch all books
         List<String> books = bookDAO.getAllBooks();

@@ -1,4 +1,4 @@
-package com.library.model;
+package com.library.classes.books;
 
 public class Book {
     private String title;

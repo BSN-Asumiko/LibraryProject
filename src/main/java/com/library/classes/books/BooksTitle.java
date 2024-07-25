@@ -1,6 +1,5 @@
-package com.library.dao;
+package com.library.classes.books;
 
-import com.library.model.Book;
 import com.library.utils.DatabaseConnection;
 
 import java.sql.Connection;
@@ -11,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageBooks {
+public class BooksTitle {
 
     // Obtener todos los libros
     public List<String> getAllBooks() {

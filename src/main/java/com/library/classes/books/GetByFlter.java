@@ -1,15 +1,12 @@
-package com.library.classes;
-
-import com.library.dao.ManageBooks;
-import com.library.model.Book;
+package com.library.classes.books;
 
 import java.util.List;
 
-public class BookDetails {
-    private final ManageBooks manageBooks;
+public class GetByFlter {
+    private final BooksTitle manageBooks;
 
-    public BookDetails() {
-        this.manageBooks = new ManageBooks();
+    public GetByFlter() {
+        this.manageBooks = new BooksTitle();
     }
 
     public void displayBookDetailsByTitle(String title) {
@@ -31,7 +28,7 @@ public class BookDetails {
     }
 
     public static void main(String[] args) {
-        BookDetails bookDetails = new BookDetails();
+        GetByFlter bookDetails = new GetByFlter();
         String title = "Harry Potter y la Cámara Secreta"; 
         bookDetails.displayBookDetailsByTitle(title);
     }
