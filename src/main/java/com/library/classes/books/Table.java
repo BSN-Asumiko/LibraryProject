@@ -1,19 +1,14 @@
-package com.library;
+package com.library.classes.books;
 
 import java.util.List;
-import com.library.classes.books.Books;
-import com.library.classes.books.GetBooks;
-import com.library.classes.books.UpdateBook;
 
-public class App {
-    public static void main(String[] args) {
-        GetBooks bookDAO = new GetBooks();
-
-        List<Books> books = bookDAO.getAllBooks();
+public class Table {
+    public static void printTable(List<Books> books) {
 
         System.out.println(
                 "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "Book ID", "Title", "Description", "ISBN", "AUTHOR", "GENRE");
+        System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "Book ID", "Title", "Description", "ISBN", "AUTHOR",
+                "GENRE");
         System.out.println(
                 "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
@@ -34,11 +29,12 @@ public class App {
         String authors = String.join(", ", book.getAuthors());
         String genres = String.join(", ", book.getGenres());
 
-        System.out.printf("%-10d %-35s %-60s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), lines[0], book.getIsbn(),
+        System.out.printf("%-10d %-35s %-60s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), lines[0],
+                book.getIsbn(),
                 authors, genres);
 
         for (int i = 1; i < lines.length; i++) {
-            System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "","");
+            System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "", "");
         }
     }
 
