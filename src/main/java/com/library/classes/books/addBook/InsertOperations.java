@@ -1,28 +1,27 @@
-package com.library.classes.books;
+package com.library.classes.books.addBook;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.library.classes.books.Books;
 import com.library.utils.DatabaseConnection;
 import com.library.utils.DatabaseUtils;
 
-public class AddBook {
-    public static void addBook(Books book) {
+public class InsertOperations {
 
-        //Handle books table
+    public static void insertBooktoTable (Books book) {
+        
         DatabaseUtils.updateBookIdSequence();
-    
-        System.out.println("Checking if book exists: " + book.getTitle());
+
+        String insertBookQuery = "INSERT INTO books (title, description, isbn) VALUES (?, ?, ?)";
         boolean bookExists = DatabaseUtils.checkExisting("books", "title", book.getTitle());
+
         if (bookExists) {
             System.out.println("A book with this title already exists in the table 'books'.");
             return;
         }
-    
-        System.out.println("Inserting book: " + book.getTitle() + ", " + book.getDescription() + ", " + book.getIsbn());
-        String insertBookQuery = "INSERT INTO books (title, description, isbn) VALUES (?, ?, ?)";
     
         try (Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertBookQuery)) {
@@ -41,20 +40,53 @@ public class AddBook {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void insertAuthortoTable (Books book) {
+
+        DatabaseUtils.updateAuthorIdSequence();
+        List<String> authors = book.getAuthors();
+        String insertAuthorQuery = "INSERT INTO authors (name) VALUES (?)";
     
-        // Handle genres table
+        for (String author : authors) {
+
+            boolean authorExists = DatabaseUtils.checkExisting("authors", "name", author);
+            if (authorExists) {
+                System.out.println("This author already exists in the table 'authors'.");
+                continue;
+            }
+
+            try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(insertAuthorQuery)) {
+    
+                preparedStatement.setString(1, author);
+    
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Author added successfully.");
+                } else {
+                    System.out.println("Failed to add the author.");
+                }
+    
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void insertGenretoTable (Books book) {
+
         DatabaseUtils.updateGenreIdSequence();
         List<String> genres = book.getGenres();
+        String insertGenreQuery = "INSERT INTO genres (name) VALUES (?)";
+
         for (String genre : genres) {
-            System.out.println("Checking if genre exists: " + genre);
+
             boolean genreExists = DatabaseUtils.checkExisting("genres", "name", genre);
             if (genreExists) {
                 System.out.println("This genre already exists in the table 'genres'.");
                 continue;
             }
-    
-            System.out.println("Inserting genre: " + genre);
-            String insertGenreQuery = "INSERT INTO genres (name) VALUES (?)";
     
             try (Connection connection = DatabaseConnection.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(insertGenreQuery)) {
@@ -72,40 +104,13 @@ public class AddBook {
                 e.printStackTrace();
             }
         }
-    
-        // Handle authors table
-        DatabaseUtils.updateAuthorIdSequence();
-        List<String> authors = book.getAuthors();
-        for (String author : authors) {
-            System.out.println("Checking if author exists: " + author);
-            boolean authorExists = DatabaseUtils.checkExisting("authors", "name", author);
-            if (authorExists) {
-                System.out.println("This author already exists in the table 'authors'.");
-                continue;
-            }
-    
-            System.out.println("Inserting author: " + author);
-            String insertAuthorQuery = "INSERT INTO authors (name) VALUES (?)";
-    
-            try (Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(insertAuthorQuery)) {
-    
-                preparedStatement.setString(1, author);
-    
-                int rowsAffected = preparedStatement.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("Author added successfully.");
-                } else {
-                    System.out.println("Failed to add the author.");
-                }
-    
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    }
 
-        //Handle book_genre table
+    public static void relateBookGenre (Books book) {
+
+        List<String> genres = book.getGenres();
         int id_book = DatabaseUtils.findIdByValue("id_book","books", "title", book.getTitle());
+        String insertIdQuery = "INSERT INTO book_genre (id_book, id_genre) VALUES (?, ?)";
 
         if (id_book == -1) {
             System.out.println("Failed to find the book ID. Book might not have been inserted.");
@@ -119,9 +124,7 @@ public class AddBook {
                 System.out.println("Genre '" + genre + "' does not exist. Skipping insertion into book_genre.");
                 continue;
             }
-
-            System.out.println("Inserting book: " + book.getTitle() + ", " + book.getDescription() + ", " + book.getIsbn());
-            String insertIdQuery = "INSERT INTO book_genre (id_book, id_genre) VALUES (?, ?)";
+            
             try (Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertIdQuery)) {
     
@@ -139,9 +142,14 @@ public class AddBook {
             e.printStackTrace();
         }
         }
+    }
 
+    public static void relateBookAuthor (Books book) {
 
-        //Handle author table
+        List<String> authors = book.getAuthors();
+        int id_book = DatabaseUtils.findIdByValue("id_book","books", "title", book.getTitle());
+        String insertIdQuery = "INSERT INTO book_author (id_book, id_author) VALUES (?, ?)";
+
         for (String author : authors) {
             int id_author = DatabaseUtils.findIdByValue("id_author","authors", "name", author);
 
@@ -149,8 +157,7 @@ public class AddBook {
                 System.out.println("Author '" + author + "' does not exist. Skipping insertion into book_author.");
                 continue;
             }
-
-            String insertIdQuery = "INSERT INTO book_author (id_book, id_author) VALUES (?, ?)";
+            
             try (Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertIdQuery)) {
     
@@ -168,6 +175,7 @@ public class AddBook {
             e.printStackTrace();
         }
         }
-
     }
+
 }
+
