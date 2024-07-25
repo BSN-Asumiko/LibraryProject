@@ -60,9 +60,9 @@ public class BooksTitle {
     }
 
     // Obtener detalles del libro por id
-    public Book findBookDetailsById(int idBook) {
+    public Books findBookDetailsById(int idBook) {
         String query = "SELECT title, description, isbn FROM books WHERE id_book = ?";
-        Book book = null;
+        Books book = null;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -71,7 +71,7 @@ public class BooksTitle {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    book = new Book(rs.getString("title"), rs.getString("description"), rs.getString("isbn"));
+                    book = new Books(rs.getString("title"), rs.getString("description"), rs.getString("isbn"));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

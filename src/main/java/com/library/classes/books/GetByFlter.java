@@ -12,7 +12,7 @@ public class GetByFlter {
     public void displayBookDetailsByTitle(String title) {
         int bookId = manageBooks.findBookIdByTitle(title);
         if (bookId != -1) {
-            Book book = manageBooks.findBookDetailsById(bookId);
+            Books book = manageBooks.findBookDetailsById(bookId);
             System.out.println("Title: " + book.getTitle());
             System.out.println("Description: " + book.getDescription());
             System.out.println("ISBN: " + book.getIsbn());
@@ -29,7 +29,7 @@ public class GetByFlter {
 
     public static void main(String[] args) {
         GetByFlter bookDetails = new GetByFlter();
-        String title = "Harry Potter y la Cámara Secreta"; 
+        String title = "Un cuento perfecto"; 
         bookDetails.displayBookDetailsByTitle(title);
     }
 }
