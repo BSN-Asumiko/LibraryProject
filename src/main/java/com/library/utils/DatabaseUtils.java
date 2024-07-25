@@ -80,7 +80,7 @@ public class DatabaseUtils {
 
         String query = "SELECT 1 FROM " + table + " WHERE " + column + " = ? LIMIT 1";
 
-        try (Connection connection = com.library.utils.DatabaseConnection.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, value);
@@ -93,4 +93,29 @@ public class DatabaseUtils {
         }
     }
 
+    public static int findIdByValue(String idName, String table, String columnName, String searchValue) {
+        String query = "SELECT " + idName + " FROM " + table + " WHERE " + columnName + " = ? LIMIT 1";
+        int id = -1;
+    
+        try (Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+    
+            preparedStatement.setString(1, searchValue);
+    
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    id = resultSet.getInt(idName);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return id;
+    }
+    
 }
+
