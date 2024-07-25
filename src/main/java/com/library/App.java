@@ -1,16 +1,40 @@
 package com.library;
 
 import java.util.List;
-
 import com.library.classes.books.Books;
 import com.library.classes.books.GetBooks;
+import com.library.classes.books.UpdateBook;
 
 public class App {
     public static void main(String[] args) {
         GetBooks bookDAO = new GetBooks();
+        UpdateBook updateDAO = new UpdateBook();
 
+        // Mostrar todos los libros antes de la actualización
+        System.out.println("Libros antes de la actualización:");
         List<Books> books = bookDAO.getAllBooks();
+        printBooks(books);
 
+        // Actualizar un libro (Ejemplo: libro con id 1)
+        int bookIdToUpdate = 1; // Cambia esto según el ID del libro que quieres actualizar
+        String newTitle = "Nuevo Título";
+        String newAuthor = "Nuevo Autor";
+
+        boolean updateSuccess = updateDAO.updateBook(bookIdToUpdate, newTitle, newAuthor);
+
+        if (updateSuccess) {
+            System.out.println("\nEl libro fue actualizado exitosamente.");
+        } else {
+            System.out.println("\nHubo un error al actualizar el libro.");
+        }
+
+        // Mostrar todos los libros después de la actualización
+        System.out.println("\nLibros después de la actualización:");
+        books = bookDAO.getAllBooks();
+        printBooks(books);
+    }
+
+    private static void printBooks(List<Books> books) {
         System.out.println(
                 "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "Book ID", "Title", "Description", "ISBN", "AUTHOR", "GENRE");
@@ -18,8 +42,6 @@ public class App {
                 "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
         for (Books book : books) {
-            System.out.println();
-
             printBook(book);
         }
         System.out.println(

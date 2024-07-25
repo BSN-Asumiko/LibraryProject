@@ -19,7 +19,7 @@ public class Books {
         this.authors = authors;
         this.genres = genres;
     }
-
+    
     public int getId() {
         return id_book;
     }
