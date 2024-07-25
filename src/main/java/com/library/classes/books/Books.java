@@ -21,12 +21,18 @@ public class Books {
     }
 
     public Books(String title, String description, String isbn, List<String> authors,
-    List<String> genres) {
+            List<String> genres) {
         this.title = title;
         this.description = description;
         this.isbn = isbn;
         this.authors = authors;
         this.genres = genres;
+    }
+
+    public Books(String title, String description, String isbn) {
+        this.title = title;
+        this.description = description;
+        this.isbn = isbn;
     }
 
     public int getId() {

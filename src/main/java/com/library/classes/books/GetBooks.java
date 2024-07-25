@@ -58,7 +58,7 @@ public class GetBooks {
             System.err.println("Error durante la recuperación de libros desde la base de datos.");
             e.printStackTrace();
         }
-
+        
         return new ArrayList<>(booksMap.values());
     }
 }
