@@ -13,11 +13,13 @@ public class App {
         List<String> genres = Arrays.asList("fantasy");
 
         // Create a new book object using the constructor without id_book
-        Books book = new Books("Super Conocido Rey de patatas", 
+        /* Books book = new Books("Super Conocido Rey de patatas", 
             "Mort has been chosen as Death apprentice. The trouble begins when instead of collecting the soul of a princess, he kills her would-be assassin, and changes history.",
-            "9780552144292", authors, genres);
+            "9780552144292", authors, genres); */
 
-        AddBook.addBook(book);
+        //AddBook.addBook(book);
+
+        System.out.println("test");
 
     }
 
