@@ -12,8 +12,8 @@ import java.util.List;
 
 public class BooksTitle {
 
-    // Obtener todos los libros
-    public List<String> getAllBooks() {
+    // Obtener todos los libros de la base de datos.
+     public List<String> getAllBooks() {
         List<String> books = new ArrayList<>();
         String query = "SELECT title FROM books";
 
@@ -32,9 +32,9 @@ public class BooksTitle {
         }
 
         return books;
-    }
+    } 
 
-    // Obtener el id_book basado en el título
+    // Busca el ID de un libro basado en su título.
     public int findBookIdByTitle(String title) {
         String query = "SELECT id_book FROM books WHERE title ILIKE ?";
         int idBook = -1;
