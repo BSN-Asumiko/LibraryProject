@@ -1,19 +1,19 @@
 package com.library;
 
-import java.util.List;
-import com.library.classes.ManageBooks;
+
+import com.library.classes.AddBook;
+import com.library.classes.Book;
 
 public class App {
     public static void main(String[] args) {
 
 
-        ManageBooks bookDAO = new ManageBooks();
+        Book book = new Book("Rey de patatas", "Patata", "Mort has been chosen as Death apprentice. The trouble begins when instead of collecting the soul of a princess, he kills her would-be assassin, and changes history.", 9780552144292l, "fantasy");
 
-        // Fetch all books
-        List<String> books = bookDAO.getAllBooks();
-        for (String book : books) {
-            System.out.println("Book Title: " + book);
-        }
+        // Add the book to the database
+        AddBook.addBook(book);
     }
+
+    
     
 }
