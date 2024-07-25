@@ -1,8 +1,9 @@
 package com.library;
 
 import java.util.List;
-import com.library.classes.Books;
-import com.library.classes.GetBooks;
+
+import com.library.classes.books.Books;
+import com.library.classes.books.GetBooks;
 
 public class App {
     public static void main(String[] args) {
@@ -11,10 +12,10 @@ public class App {
         List<Books> books = bookDAO.getAllBooks();
 
         System.out.println(
-                "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-10s %-30s %-60s %-20s %-40s %-20s\n", "Book ID", "Title", "Description", "ISBN", "AUTHOR", "GENRE");
+                "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "Book ID", "Title", "Description", "ISBN", "AUTHOR", "GENRE");
         System.out.println(
-                "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
         for (Books book : books) {
             System.out.println();
@@ -22,7 +23,7 @@ public class App {
             printBook(book);
         }
         System.out.println(
-                "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     private static void printBook(Books book) {
@@ -33,11 +34,11 @@ public class App {
         String authors = String.join(", ", book.getAuthors());
         String genres = String.join(", ", book.getGenres());
 
-        System.out.printf("%-10d %-30s %-60s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), lines[0], book.getIsbn(),
+        System.out.printf("%-10d %-35s %-60s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), lines[0], book.getIsbn(),
                 authors, genres);
 
         for (int i = 1; i < lines.length; i++) {
-            System.out.printf("%-10s %-30s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "","");
+            System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "","");
         }
     }
 

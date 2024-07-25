@@ -1,4 +1,4 @@
-package com.library.classes;
+package com.library.classes.books;
 
 import com.library.utils.DatabaseConnection;
 import java.sql.Connection;
