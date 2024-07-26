@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.library.classes.books.Books;
 import com.library.classes.books.GetBooks;
+import com.library.classes.books.GetByFlter;
 import com.library.classes.books.Table;
 import com.library.classes.books.addBook.AddBook;
 
@@ -24,5 +25,9 @@ public class App {
             "9780552144292", authors, genres);
 
         AddBook.addBook(book);
+
+        GetByFlter bookDetails = new GetByFlter();
+        String title = "Un cuento perfecto"; 
+        bookDetails.displayBookDetailsByTitle(title);
     }
 }

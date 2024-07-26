@@ -27,9 +27,4 @@ public class GetByFlter {
         }
     }
 
-    public static void main(String[] args) {
-        GetByFlter bookDetails = new GetByFlter();
-        String title = "Un cuento perfecto"; 
-        bookDetails.displayBookDetailsByTitle(title);
-    }
 }
