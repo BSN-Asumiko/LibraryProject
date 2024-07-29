@@ -6,7 +6,8 @@ import java.util.List;
 
 import com.library.classes.books.Books;
 import com.library.classes.books.GetBooks;
-import com.library.classes.books.GetByFlter;
+import com.library.classes.books.GetByFilter;
+
 import com.library.classes.books.Table;
 import com.library.classes.books.addBook.AddBook;
 
@@ -25,7 +26,7 @@ public class App {
 
         AddBook.addBook(book);
 
-        GetByFlter bookDetails = new GetByFlter();
+        GetByFilter bookDetails = new GetByFilter();
         String title = "Un cuento perfecto"; 
         bookDetails.displayBookDetailsByTitle(title);
     }

@@ -2,11 +2,11 @@ package com.library.classes.books;
 
 import java.util.List;
 
-public class GetByFlter {
+public class GetByFilter {
     private final BooksTitle manageBooks;
     private final UpdateBook updateBook;
 
-    public GetByFlter() {
+    public GetByFilter() {
         this.manageBooks = new BooksTitle();
         this.updateBook = new UpdateBook();
     }
@@ -44,7 +44,7 @@ public class GetByFlter {
     }
 
     public static void main(String[] args) {
-        GetByFlter bookDetails = new GetByFlter();
+        GetByFilter bookDetails = new GetByFilter();
         String title = "Un cuento perfecto"; 
         bookDetails.displayBookDetailsByTitle(title);
 
