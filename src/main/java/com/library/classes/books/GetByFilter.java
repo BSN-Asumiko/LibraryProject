@@ -4,11 +4,12 @@ import java.util.List;
 
 public class GetByFilter {
     private final BooksTitle manageBooks;
-    private final UpdateBook updateBook;
+
+    
 
     public GetByFilter() {
         this.manageBooks = new BooksTitle();
-        this.updateBook = new UpdateBook();
+
     }
 
     public void displayBookDetailsByTitle(String title) {
@@ -29,26 +30,4 @@ public class GetByFilter {
         }
     }
 
-    public void updateBookTitleByTitle(String currentTitle, String newTitle) {
-        int bookId = manageBooks.findBookIdByTitle(currentTitle);
-        if (bookId != -1) {
-            boolean success = updateBook.updateBookTitle(bookId, newTitle);
-            if (success) {
-                System.out.println("Book title updated from '" + currentTitle + "' to '" + newTitle + "'.");
-            } else {
-                System.out.println("Failed to update the book title.");
-            }
-        } else {
-            System.out.println("No book found with the title: " + currentTitle);
-        }
-    }
-
-    public static void main(String[] args) {
-        GetByFilter bookDetails = new GetByFilter();
-        String title = "Un cuento perfecto"; 
-        bookDetails.displayBookDetailsByTitle(title);
-
-        // Actualizar el título del libro
-        bookDetails.updateBookTitleByTitle("Un cuento perfecto", "Un cuento actualizado");
-    }
 }

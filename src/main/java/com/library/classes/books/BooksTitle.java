@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class BooksTitle {
 
     // Obtener todos los libros de la base de datos.
@@ -18,8 +20,8 @@ public class BooksTitle {
         String query = "SELECT title FROM books";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
                 String title = resultSet.getString("title");
@@ -115,7 +117,7 @@ public class BooksTitle {
         List<String> authors = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setInt(1, idBook);
 
