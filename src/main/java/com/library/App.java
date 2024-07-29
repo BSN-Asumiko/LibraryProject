@@ -13,7 +13,6 @@ import com.library.classes.books.addBook.AddBook;
 public class App {
     public static void main(String[] args) {
         GetBooks bookDAO = new GetBooks();
-
         List<Books> books = bookDAO.getAllBooks();
         Table.printTable(books);
 
@@ -31,3 +30,4 @@ public class App {
         bookDetails.displayBookDetailsByTitle(title);
     }
 }
+

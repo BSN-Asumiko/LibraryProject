@@ -5,8 +5,11 @@ import java.util.List;
 public class GetByFlter {
     private final BooksTitle manageBooks;
 
+    
+
     public GetByFlter() {
         this.manageBooks = new BooksTitle();
+
     }
 
     public void displayBookDetailsByTitle(String title) {
