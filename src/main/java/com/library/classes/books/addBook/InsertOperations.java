@@ -5,13 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.library.classes.books.Books;
-import com.library.utils.DatabaseConnection;
+import com.library.config.DBManager;
+import com.library.model.Book;
 import com.library.utils.DatabaseUtils;
 
 public class InsertOperations {
 
-    public static void insertBooktoTable (Books book) {
+    public static void insertBooktoTable (Book book) {
         
         DatabaseUtils.updateBookIdSequence();
 
@@ -23,7 +23,7 @@ public class InsertOperations {
             return;
         }
     
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertBookQuery)) {
     
             preparedStatement.setString(1, book.getTitle());
@@ -42,7 +42,7 @@ public class InsertOperations {
         }
     }
 
-    public static void insertAuthortoTable (Books book) {
+    public static void insertAuthortoTable (Book book) {
 
         DatabaseUtils.updateAuthorIdSequence();
         List<String> authors = book.getAuthors();
@@ -56,7 +56,7 @@ public class InsertOperations {
                 continue;
             }
 
-            try (Connection connection = DatabaseConnection.getConnection();
+            try (Connection connection = DBManager.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(insertAuthorQuery)) {
     
                 preparedStatement.setString(1, author);
@@ -74,7 +74,7 @@ public class InsertOperations {
         }
     }
 
-    public static void insertGenretoTable (Books book) {
+    public static void insertGenretoTable (Book book) {
 
         DatabaseUtils.updateGenreIdSequence();
         List<String> genres = book.getGenres();
@@ -88,7 +88,7 @@ public class InsertOperations {
                 continue;
             }
     
-            try (Connection connection = DatabaseConnection.getConnection();
+            try (Connection connection = DBManager.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(insertGenreQuery)) {
     
                 preparedStatement.setString(1, genre);
@@ -106,7 +106,7 @@ public class InsertOperations {
         }
     }
 
-    public static void relateBookGenre (Books book) {
+    public static void relateBookGenre (Book book) {
 
         List<String> genres = book.getGenres();
         int id_book = DatabaseUtils.findIdByValue("id_book","books", "title", book.getTitle());
@@ -125,7 +125,7 @@ public class InsertOperations {
                 continue;
             }
             
-            try (Connection connection = DatabaseConnection.getConnection();
+            try (Connection connection = DBManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertIdQuery)) {
     
             preparedStatement.setInt(1, id_book);
@@ -144,7 +144,7 @@ public class InsertOperations {
         }
     }
 
-    public static void relateBookAuthor (Books book) {
+    public static void relateBookAuthor (Book book) {
 
         List<String> authors = book.getAuthors();
         int id_book = DatabaseUtils.findIdByValue("id_book","books", "title", book.getTitle());
@@ -158,7 +158,7 @@ public class InsertOperations {
                 continue;
             }
             
-            try (Connection connection = DatabaseConnection.getConnection();
+            try (Connection connection = DBManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertIdQuery)) {
     
             preparedStatement.setInt(1, id_book);

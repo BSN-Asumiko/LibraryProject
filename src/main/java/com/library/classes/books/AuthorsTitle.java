@@ -7,14 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.library.utils.DatabaseConnection;
+import com.library.config.DBManager;
 
 public class AuthorsTitle {
     public int findAuthorIDByAuthorName(String name) {
         String query = "SELECT id_author FROM authors WHERE name ILIKE ?";
         int idAuthor = -1;
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DBManager.initConnection();
         PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, "%" + name + "%");
@@ -40,7 +40,7 @@ public class AuthorsTitle {
         String query = "SELECT b.title FROM book_author ba JOIN books b on ba.id_book = b.id_book WHERE ba.id_author = ?";
         List<String> books = new ArrayList<>();
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DBManager.initConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
                 pstmt.setInt(1, idAuthor);

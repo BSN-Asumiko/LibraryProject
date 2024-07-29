@@ -2,6 +2,8 @@ package com.library.classes.books;
 
 import java.util.List;
 
+import com.library.model.Book;
+
 public class GetByFilter {
     private final BooksTitle manageBooks;
     private final UpdateBook updateBook;
@@ -14,7 +16,7 @@ public class GetByFilter {
     public void displayBookDetailsByTitle(String title) {
         int bookId = manageBooks.findBookIdByTitle(title);
         if (bookId != -1) {
-            Books book = manageBooks.findBookDetailsById(bookId);
+            Book book = manageBooks.findBookDetailsById(bookId);
             System.out.println("Title: " + book.getTitle());
             System.out.println("Description: " + book.getDescription());
             System.out.println("ISBN: " + book.getIsbn());

@@ -2,8 +2,10 @@ package com.library.classes.books;
 
 import java.util.List;
 
+import com.library.model.Book;
+
 public class Table {
-    public static void printTable(List<Books> books) {
+    public static void printTable(List<Book> books) {
 
         System.out.println(
                 "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -12,7 +14,7 @@ public class Table {
         System.out.println(
                 "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
-        for (Books book : books) {
+        for (Book book : books) {
             System.out.println();
 
             printBook(book);
@@ -21,7 +23,7 @@ public class Table {
                 "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    private static void printBook(Books book) {
+    private static void printBook(Book book) {
         String description = book.getDescription();
         final int descriptionWidth = 50;
 

@@ -5,13 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.library.config.DBManager;
+
 public class DatabaseUtils {
 
     public static void updateBookIdSequence() {
         String maxIdQuery = "SELECT MAX(id_book) FROM books";
         String setValQuery = "SELECT setval('books_id_seq', ?, false)";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.getConnection();
                 PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
                 ResultSet resultSet = maxIdStatement.executeQuery()) {
 
@@ -34,7 +36,7 @@ public class DatabaseUtils {
         String maxIdQuery = "SELECT MAX(id_genre) FROM genres";
         String setValQuery = "SELECT setval('genres_id_seq', ?, false)";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.getConnection();
                 PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
                 ResultSet resultSet = maxIdStatement.executeQuery()) {
 
@@ -57,7 +59,7 @@ public class DatabaseUtils {
         String maxIdQuery = "SELECT MAX(id_author) FROM authors";
         String setValQuery = "SELECT setval('authors_id_seq', ?, false)";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.getConnection();
                 PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
                 ResultSet resultSet = maxIdStatement.executeQuery()) {
 
@@ -80,7 +82,7 @@ public class DatabaseUtils {
 
         String query = "SELECT 1 FROM " + table + " WHERE " + column + " = ? LIMIT 1";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, value);
@@ -97,7 +99,7 @@ public class DatabaseUtils {
         String query = "SELECT " + idName + " FROM " + table + " WHERE " + columnName + " = ? LIMIT 1";
         int id = -1;
     
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
     
             preparedStatement.setString(1, searchValue);

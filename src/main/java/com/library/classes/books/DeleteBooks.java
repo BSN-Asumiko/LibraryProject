@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.library.utils.DatabaseConnection;
+import com.library.config.DBManager;
 
 public class DeleteBooks {
 
     public boolean deleteBookById(int id) {
         String SQL_DELETE = "DELETE FROM books WHERE id_book = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.initConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE)) {
 
                 preparedStatement.setInt(1, id);
@@ -35,7 +35,7 @@ public class DeleteBooks {
     public boolean deleteBookByTitle(String title) {
         String SQL_DELETE = "DELETE FROM books WHERE title = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.initConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE)) {
 
                 preparedStatement.setString(1, title);

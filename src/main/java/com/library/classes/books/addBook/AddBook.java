@@ -1,10 +1,10 @@
 package com.library.classes.books.addBook;
 
-import com.library.classes.books.Books;
+import com.library.model.Book;
 
 public class AddBook {
 
-    public static void addBook (Books book) {
+    public static void addBook (Book book) {
         
         InsertOperations.insertBooktoTable(book);
         InsertOperations.insertAuthortoTable(book);

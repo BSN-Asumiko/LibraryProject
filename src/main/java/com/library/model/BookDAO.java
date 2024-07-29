@@ -1,6 +1,5 @@
-package com.library.classes.books;
+package com.library.model;
 
-import com.library.utils.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,9 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GetBooks {
-    public List<Books> getAllBooks() {
-        Map<Integer, Books> booksMap = new HashMap<>();
+import com.library.config.DBManager;
+
+public class BookDAO implements BookDAOInterface {
+    public List<Book> getAllBooks() {
+        Map<Integer, Book> booksMap = new HashMap<>();
 
         String query = "SELECT b.id_book, b.title, b.description, b.isbn, " +
                 "a.name AS author_name, g.name AS genre_name " +
@@ -24,7 +25,7 @@ public class GetBooks {
                 "ORDER BY b.id_book ASC";
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager. initConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query)) {
 
@@ -36,13 +37,13 @@ public class GetBooks {
                 String authorName = resultSet.getString("author_name");
                 String genreName = resultSet.getString("genre_name");
 
-                Books book = booksMap.get(id_book);
+                Book book = booksMap.get(id_book);
                 if (book == null) {
                     List<String> authors = new ArrayList<>();
                     List<String> genres = new ArrayList<>();
                     authors.add(authorName);
                     genres.add(genreName);
-                    book = new Books(id_book, title, description, isbn, authors, genres);
+                    book = new Book(id_book, title, description, isbn, authors, genres);
                     booksMap.put(id_book, book);
                 } else {
                     List<String> authors = book.getAuthors();
@@ -62,4 +63,5 @@ public class GetBooks {
         
         return new ArrayList<>(booksMap.values());
     }
+
 }

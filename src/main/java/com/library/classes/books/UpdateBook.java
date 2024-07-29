@@ -1,16 +1,17 @@
 package com.library.classes.books;
 
-import com.library.utils.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import com.library.config.DBManager;
 
 public class UpdateBook {
 
     public boolean updateBookTitle(int idBook, String newTitle) {
         String updateBookQuery = "UPDATE books SET title = ? WHERE id_book = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = DBManager.initConnection();
             PreparedStatement bookStatement = connection.prepareStatement(updateBookQuery)) {
 
             // Actualizar el título del libro

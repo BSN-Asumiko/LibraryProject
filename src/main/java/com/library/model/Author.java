@@ -1,11 +1,11 @@
-package com.library.classes;
+package com.library.model;
 
-public class Authors {
+public class Author {
 
     private int id_author;
     private String name;
 
-    public Authors(int id_author, String name) {
+    public Author(int id_author, String name) {
         this.id_author = id_author;
         this.name = name;
     }
