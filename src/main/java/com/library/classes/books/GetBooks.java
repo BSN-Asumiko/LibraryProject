@@ -23,6 +23,7 @@ public class GetBooks {
                 "JOIN genres g ON bg.id_genre = g.id_genre " +
                 "ORDER BY b.id_book ASC";
 
+
         try (Connection connection = DatabaseConnection.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query)) {
@@ -58,7 +59,7 @@ public class GetBooks {
             System.err.println("Error durante la recuperación de libros desde la base de datos.");
             e.printStackTrace();
         }
-
+        
         return new ArrayList<>(booksMap.values());
     }
 }
