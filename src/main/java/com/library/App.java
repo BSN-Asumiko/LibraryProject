@@ -3,7 +3,6 @@ package com.library;
 import java.util.Arrays;
 import java.util.List;
 
-
 import com.library.classes.books.Books;
 import com.library.classes.books.GetBooks;
 import com.library.classes.books.GetByFlter;
@@ -13,7 +12,6 @@ import com.library.classes.books.addBook.AddBook;
 public class App {
     public static void main(String[] args) {
         GetBooks bookDAO = new GetBooks();
-
         List<Books> books = bookDAO.getAllBooks();
         Table.printTable(books);
 
@@ -31,3 +29,4 @@ public class App {
         bookDetails.displayBookDetailsByTitle(title);
     }
 }
+
