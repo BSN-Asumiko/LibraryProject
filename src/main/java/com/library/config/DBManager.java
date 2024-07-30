@@ -3,7 +3,6 @@ package com.library.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-
 import io.github.cdimascio.dotenv.Dotenv; 
 
 public class DBManager {
@@ -17,7 +16,7 @@ public class DBManager {
     
     public static Connection initConnection() {
         try {
-            connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+            connection = DriverManager.getConnection(JDBC_URL, USERNAME,  PASSWORD);
             System.out.println("\033[0;32m" + "¡Conectado con éxito!" + "\033[0m");
             
         } catch (Exception e) {
