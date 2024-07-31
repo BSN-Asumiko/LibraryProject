@@ -15,83 +15,85 @@ import com.library.model.utils.DatabaseUtils;
 public class BookDAO implements BookDAOInterface {
     DatabaseUtils databaseUtils = new DatabaseUtils();
 
-   @Override
-public List<Book> getAllBooks() {
-    List<Book> books = new ArrayList<>();
-    String query = "SELECT b.id_book, b.title, b.description, b.isbn, " +
-                   "a.name AS author_name, g.name AS genre_name " +
-                   "FROM books b " +
-                   "LEFT JOIN book_author ba ON b.id_book = ba.id_book " +
-                   "LEFT JOIN authors a ON ba.id_author = a.id_author " +
-                   "LEFT JOIN book_genre bg ON b.id_book = bg.id_book " +
-                   "LEFT JOIN genres g ON bg.id_genre = g.id_genre " +
-                   "ORDER BY b.id_book ASC";
+    @Override
+    public List<Book> getAllBooks() {
+        List<Book> books = new ArrayList<>();
+        String query = "SELECT b.id_book, b.title, b.description, b.isbn, " +
+                "a.name AS author_name, g.name AS genre_name " +
+                "FROM books b " +
+                "LEFT JOIN book_author ba ON b.id_book = ba.id_book " +
+                "LEFT JOIN authors a ON ba.id_author = a.id_author " +
+                "LEFT JOIN book_genre bg ON b.id_book = bg.id_book " +
+                "LEFT JOIN genres g ON bg.id_genre = g.id_genre " +
+                "ORDER BY b.id_book ASC";
 
-    try (Connection connection = DBManager.initConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(query);
-         ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (Connection connection = DBManager.initConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                ResultSet resultSet = preparedStatement.executeQuery()) {
 
-        Map<Integer, Book> booksMap = new HashMap<>();
+            Map<Integer, Book> booksMap = new HashMap<>();
 
-        while (resultSet.next()) {
-            int idBook = resultSet.getInt("id_book");
-            String title = resultSet.getString("title");
-            String description = resultSet.getString("description");
-            String isbn = resultSet.getString("isbn");
-            String authorName = resultSet.getString("author_name");
-            String genreName = resultSet.getString("genre_name");
+            while (resultSet.next()) {
+                int idBook = resultSet.getInt("id_book");
+                String title = resultSet.getString("title");
+                String description = resultSet.getString("description");
+                String isbn = resultSet.getString("isbn");
+                String authorName = resultSet.getString("author_name");
+                String genreName = resultSet.getString("genre_name");
 
-            Book book = booksMap.get(idBook);
-            if (book == null) {
-                List<String> authors = new ArrayList<>();
-                List<String> genres = new ArrayList<>();
-                if (authorName != null) authors.add(authorName);
-                if (genreName != null) genres.add(genreName);
-                book = new Book(idBook, title, description, isbn, authors, genres);
-                booksMap.put(idBook, book);
-            } else {
-                List<String> authors = book.getAuthors();
-                List<String> genres = book.getGenres();
-                if (authorName != null && !authors.contains(authorName)) {
-                    authors.add(authorName);
-                }
-                if (genreName != null && !genres.contains(genreName)) {
-                    genres.add(genreName);
+                Book book = booksMap.get(idBook);
+                if (book == null) {
+                    List<String> authors = new ArrayList<>();
+                    List<String> genres = new ArrayList<>();
+                    if (authorName != null)
+                        authors.add(authorName);
+                    if (genreName != null)
+                        genres.add(genreName);
+                    book = new Book(idBook, title, description, isbn, authors, genres);
+                    booksMap.put(idBook, book);
+                } else {
+                    List<String> authors = book.getAuthors();
+                    List<String> genres = book.getGenres();
+                    if (authorName != null && !authors.contains(authorName)) {
+                        authors.add(authorName);
+                    }
+                    if (genreName != null && !genres.contains(genreName)) {
+                        genres.add(genreName);
+                    }
                 }
             }
-        }
-        books.addAll(booksMap.values());
+            books.addAll(booksMap.values());
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-    } finally {
-        DBManager.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeConnection();
+        }
+
+        return books;
     }
 
-    return books;
-}
+    public void printTable(List<Book> books) {
+        System.out.println("---------------------------------------------------------------------");
+        System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "ID", "Title", "Description", "ISBN", "Authors",
+                "Genres");
+        System.out.println("---------------------------------------------------------------------");
 
-   public void printTable(List<Book> books) {
-    System.out.println("---------------------------------------------------------------------");
-    System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "ID", "Title", "Description", "ISBN", "Authors",
-            "Genres");
-    System.out.println("---------------------------------------------------------------------");
+        for (Book book : books) {
+            String description = book.getDescription();
+            final int descriptionWidth = 50;
+            String[] lines = splitString(description, descriptionWidth);
+            String authors = String.join(", ", book.getAuthors());
+            String genres = String.join(", ", book.getGenres());
 
-    for (Book book : books) {
-        String description = book.getDescription();
-        final int descriptionWidth = 50;
-        String[] lines = splitString(description, descriptionWidth);
-        String authors = String.join(", ", book.getAuthors());
-        String genres = String.join(", ", book.getGenres());
-
-        System.out.printf("%-10d %-35s %-60s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), lines[0],
-                book.getIsbn(), authors, genres);
-        for (int i = 1; i < lines.length; i++) {
-            System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "", "");
+            System.out.printf("%-10d %-35s %-60s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), lines[0],
+                    book.getIsbn(), authors, genres);
+            for (int i = 1; i < lines.length; i++) {
+                System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "", "");
+            }
         }
+        System.out.println("---------------------------------------------------------------------");
     }
-    System.out.println("---------------------------------------------------------------------");
-}
 
     private static String[] splitString(String str, int width) {
         if (str == null || width <= 0) {
@@ -113,17 +115,16 @@ public List<Book> getAllBooks() {
 
     public void insertBooktoTable(Book book) {
 
-
         String createSeqQuery = "CREATE SEQUENCE IF NOT EXISTS books_id_seq START WITH 1 INCREMENT BY 1";
         String alterTableQuery = "ALTER TABLE books ALTER COLUMN id_book SET DEFAULT nextval('books_id_seq')";
         String maxIdQuery = "SELECT MAX(id_book) FROM books";
         String setValQuery = "SELECT setval('books_id_seq', ?, false)";
 
         try (Connection connection = DBManager.initConnection();
-            Statement createSeqStatement = connection.createStatement();
-            Statement alterTableStatement = connection.createStatement();
-            PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
-            ResultSet resultSet = maxIdStatement.executeQuery()) {
+                Statement createSeqStatement = connection.createStatement();
+                Statement alterTableStatement = connection.createStatement();
+                PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
+                ResultSet resultSet = maxIdStatement.executeQuery()) {
 
             createSeqStatement.execute(createSeqQuery);
 
@@ -260,9 +261,8 @@ public List<Book> getAllBooks() {
         try (Connection connection = DBManager.initConnection();
                 PreparedStatement bookStatement = connection.prepareStatement(updateBookQuery)) {
 
-            // Actualizar el título del libro
             bookStatement.setString(1, newTitle);
-            // bookStatement.setInt(2, idBook);
+
             int bookRowsUpdated = bookStatement.executeUpdate();
             if (bookRowsUpdated > 0) {
                 System.out.println("Book title updated from '" + currentTitle + "' to '" + newTitle + "'.");
@@ -279,18 +279,49 @@ public List<Book> getAllBooks() {
 
     }
 
+    @Override
     public void deleteBookByTitle(String title) {
-
         int bookId = databaseUtils.findIdByValue("id_book", "books", "title", title);
 
         if (bookId == -1) {
             System.out.println("No book found with the title: " + title);
             return;
         }
-        String SQL_DELETE = "DELETE FROM books WHERE id_book = ?";
 
+        String SQL_DELETE_GENRE = "DELETE FROM book_genre WHERE id_book = ?";
         try (Connection connection = DBManager.initConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_GENRE)) {
+
+            preparedStatement.setInt(1, bookId);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error durante la eliminación de referencias en book_genre");
+            e.printStackTrace();
+            return;
+        } finally {
+            DBManager.closeConnection();
+        }
+
+        String SQL_DELETE_AUTHOR = "DELETE FROM book_author WHERE id_book = ?";
+        try (Connection connection = DBManager.initConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_AUTHOR)) {
+
+            preparedStatement.setInt(1, bookId);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error durante la eliminación de referencias en book_author");
+            e.printStackTrace();
+            return;
+        } finally {
+            DBManager.closeConnection();
+        }
+
+        // Eliminar el libro en books
+        String SQL_DELETE_BOOK = "DELETE FROM books WHERE id_book = ?";
+        try (Connection connection = DBManager.initConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BOOK)) {
 
             preparedStatement.setInt(1, bookId);
             int rowsAffected = preparedStatement.executeUpdate();
@@ -299,7 +330,6 @@ public List<Book> getAllBooks() {
                 System.out.println("Libro eliminado correctamente");
             } else {
                 System.out.println("No se ha encontrado ningún libro con ese título");
-
             }
 
         } catch (SQLException e) {
@@ -309,9 +339,7 @@ public List<Book> getAllBooks() {
         } finally {
             DBManager.closeConnection();
         }
-
     }
-
 
     public void findBookDetailsById(int idBook) {
         String query = "SELECT title, description, isbn FROM books WHERE id_book = ?";
@@ -357,9 +385,8 @@ public List<Book> getAllBooks() {
                             rs.getString("title"),
                             rs.getString("description"),
                             rs.getString("isbn"),
-                            new ArrayList<>(), // Agrega autores si es necesario
-                            new ArrayList<>() // Agrega géneros si es necesario
-                    );
+                            new ArrayList<>(),
+                            new ArrayList<>());
                     books.add(book);
                 }
             } catch (SQLException e) {
@@ -392,9 +419,8 @@ public List<Book> getAllBooks() {
                             rs.getString("title"),
                             rs.getString("description"),
                             rs.getString("isbn"),
-                            new ArrayList<>(), // Agrega autores si es necesario
-                            new ArrayList<>() // Agrega géneros si es necesario
-                    );
+                            new ArrayList<>(),
+                            new ArrayList<>());
                     books.add(book);
                 }
             } catch (SQLException e) {
