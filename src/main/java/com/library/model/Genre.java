@@ -1,10 +1,10 @@
-package com.library.classes;
+package com.library.model;
 
-public class Genres {
+public class Genre {
     private int id_genre;
     private String name;
 
-    public Genres(int id_genre, String name) {
+    public Genre(int id_genre, String name) {
         this.id_genre = id_genre;
         this.name = name;
     }
