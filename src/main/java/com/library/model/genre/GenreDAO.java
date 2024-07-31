@@ -12,63 +12,48 @@ import com.library.model.book.Book;
 import com.library.model.utils.DatabaseUtils;
 
 public class GenreDAO implements GenreDAOInterface {
+    @Override
     public void insertGenretoTable(Book book) {
 
-        String maxIdQuery = "SELECT MAX(id_author) FROM authors";
-        String setValQuery = "SELECT setval('authors_id_seq', ?, false)";
+        String createSeqQuery = "CREATE SEQUENCE IF NOT EXISTS genres_id_seq START WITH 1 INCREMENT BY 1";
+        String insertGenreQuery = "INSERT INTO genres (name) VALUES (?) ON CONFLICT DO NOTHING";
 
         try (Connection connection = DBManager.initConnection();
-                PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
-                ResultSet resultSet = maxIdStatement.executeQuery()) {
+                PreparedStatement createSeqStatement = connection.prepareStatement(createSeqQuery)) {
 
-            long maxId = 0;
-            if (resultSet.next()) {
-                maxId = resultSet.getLong(1);
+            createSeqStatement.execute();
+
+            List<String> genres = book.getGenres();
+            for (String genre : genres) {
+
+                boolean genreExists = DatabaseUtils.checkExisting("genres", "name", genre);
+                if (genreExists) {
+                    System.out.println("This genre already exists in the table 'genres'.");
+                    continue;
+                }
+
+                try (PreparedStatement preparedStatement = connection.prepareStatement(insertGenreQuery)) {
+                    preparedStatement.setString(1, genre);
+
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    if (rowsAffected > 0) {
+                        System.out.println("Genre added successfully.");
+                    } else {
+                        System.out.println("Failed to add the genre.");
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-
-            try (PreparedStatement setValStatement = connection.prepareStatement(setValQuery)) {
-                setValStatement.setLong(1, maxId + 1);
-                setValStatement.execute();
-            }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBManager.closeConnection();
         }
-
-        List<String> genres = book.getGenres();
-        String insertGenreQuery = "INSERT INTO genres (name) VALUES (?)";
-
-        for (String genre : genres) {
-
-            boolean genreExists = DatabaseUtils.checkExisting("genres", "name", genre);
-            if (genreExists) {
-                System.out.println("This genre already exists in the table 'genres'.");
-                continue;
-            }
-
-            try (Connection connection = DBManager.initConnection();
-                    PreparedStatement preparedStatement = connection.prepareStatement(insertGenreQuery)) {
-
-                preparedStatement.setString(1, genre);
-
-                int rowsAffected = preparedStatement.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("Genre added successfully.");
-                } else {
-                    System.out.println("Failed to add the genre.");
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                DBManager.closeConnection();
-            }
-        }
     }
 
-    // Obtener géneros del libro por id
+    @Override
     public void findGenresByBookId(int idBook) {
         String query = "SELECT g.name FROM book_genre bg JOIN genres g ON bg.id_genre = g.id_genre WHERE bg.id_book = ?";
         List<String> genres = new ArrayList<>();
@@ -94,5 +79,4 @@ public class GenreDAO implements GenreDAOInterface {
 
         System.out.println("Genres: " + String.join(", ", genres));
     }
-    
 }

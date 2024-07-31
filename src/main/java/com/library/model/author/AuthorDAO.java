@@ -12,8 +12,6 @@ import com.library.model.utils.DatabaseUtils;
 
 public class AuthorDAO implements AuthorDAOInterface {
 
-    private DatabaseUtils databaseUtils = new DatabaseUtils(); // Instancia para métodos no estáticos
-
     @Override
     public void insertAuthortoTable(Book book) {
         List<String> authors = book.getAuthors();
@@ -22,9 +20,14 @@ public class AuthorDAO implements AuthorDAOInterface {
             return;
         }
 
-        String insertAuthorQuery = "INSERT INTO authors (name) VALUES (?)";
+        String createSeqQuery = "CREATE SEQUENCE IF NOT EXISTS authors_id_seq START WITH 1 INCREMENT BY 1";
+        String insertAuthorQuery = "INSERT INTO authors (name) VALUES (?) ON CONFLICT DO NOTHING";
 
-        try (Connection connection = DBManager.initConnection()) {
+        try (Connection connection = DBManager.initConnection();
+                PreparedStatement createSeqStatement = connection.prepareStatement(createSeqQuery)) {
+
+            createSeqStatement.execute();
+
             for (String author : authors) {
                 boolean authorExists = DatabaseUtils.checkExisting("authors", "name", author);
                 if (authorExists) {
@@ -40,8 +43,6 @@ public class AuthorDAO implements AuthorDAOInterface {
                     } else {
                         System.out.println("Failed to add the author '" + author + "'.");
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
             }
         } catch (SQLException e) {
@@ -86,6 +87,7 @@ public class AuthorDAO implements AuthorDAOInterface {
 
     @Override
     public int findAuthorIDByAuthorName(String author) {
+        DatabaseUtils databaseUtils = new DatabaseUtils();
         return databaseUtils.findIdByValue("id_author", "authors", "name", author);
     }
 }

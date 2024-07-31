@@ -256,14 +256,17 @@ public class BookDAO implements BookDAOInterface {
             System.out.println("No book found with the title: " + currentTitle);
             return;
         }
+
         String updateBookQuery = "UPDATE books SET title = ? WHERE id_book = ?";
 
         try (Connection connection = DBManager.initConnection();
-                PreparedStatement bookStatement = connection.prepareStatement(updateBookQuery)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(updateBookQuery)) {
 
-            bookStatement.setString(1, newTitle);
+            // Configurar todos los parámetros de la consulta preparada
+            preparedStatement.setString(1, newTitle);
+            preparedStatement.setInt(2, bookId);
 
-            int bookRowsUpdated = bookStatement.executeUpdate();
+            int bookRowsUpdated = preparedStatement.executeUpdate();
             if (bookRowsUpdated > 0) {
                 System.out.println("Book title updated from '" + currentTitle + "' to '" + newTitle + "'.");
             } else {
@@ -272,11 +275,9 @@ public class BookDAO implements BookDAOInterface {
 
         } catch (SQLException e) {
             e.printStackTrace();
-
         } finally {
             DBManager.closeConnection();
         }
-
     }
 
     @Override
@@ -288,56 +289,81 @@ public class BookDAO implements BookDAOInterface {
             return;
         }
 
-        String SQL_DELETE_GENRE = "DELETE FROM book_genre WHERE id_book = ?";
-        try (Connection connection = DBManager.initConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_GENRE)) {
+        Connection connection = null;
 
-            preparedStatement.setInt(1, bookId);
-            preparedStatement.executeUpdate();
+        try {
+            connection = DBManager.initConnection();
+            connection.setAutoCommit(false); // Iniciar transacción
 
-        } catch (SQLException e) {
-            System.err.println("Error durante la eliminación de referencias en book_genre");
-            e.printStackTrace();
-            return;
-        } finally {
-            DBManager.closeConnection();
-        }
-
-        String SQL_DELETE_AUTHOR = "DELETE FROM book_author WHERE id_book = ?";
-        try (Connection connection = DBManager.initConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_AUTHOR)) {
-
-            preparedStatement.setInt(1, bookId);
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            System.err.println("Error durante la eliminación de referencias en book_author");
-            e.printStackTrace();
-            return;
-        } finally {
-            DBManager.closeConnection();
-        }
-
-        // Eliminar el libro en books
-        String SQL_DELETE_BOOK = "DELETE FROM books WHERE id_book = ?";
-        try (Connection connection = DBManager.initConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BOOK)) {
-
-            preparedStatement.setInt(1, bookId);
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("Libro eliminado correctamente");
-            } else {
-                System.out.println("No se ha encontrado ningún libro con ese título");
+            // Eliminar referencias en book_genre
+            String SQL_DELETE_GENRE = "DELETE FROM book_genre WHERE id_book = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_GENRE)) {
+                preparedStatement.setInt(1, bookId);
+                preparedStatement.executeUpdate();
             }
 
+            // Eliminar referencias en book_author
+            String SQL_DELETE_AUTHOR = "DELETE FROM book_author WHERE id_book = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_AUTHOR)) {
+                preparedStatement.setInt(1, bookId);
+                preparedStatement.executeUpdate();
+            }
+
+            // Eliminar el libro en books
+            String SQL_DELETE_BOOK = "DELETE FROM books WHERE id_book = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BOOK)) {
+                preparedStatement.setInt(1, bookId);
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    System.out.println("Libro eliminado correctamente");
+                } else {
+                    System.out.println("No se ha encontrado ningún libro con ese título");
+                }
+            }
+
+            // Eliminar autores y géneros no referenciados
+            deleteOrphanAuthors(connection);
+            deleteOrphanGenres(connection);
+
+            connection.commit(); // Confirmar transacción
+
         } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback(); // Revertir cambios en caso de error
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             System.err.println("Error durante la eliminación del libro desde la base de datos");
             e.printStackTrace();
 
         } finally {
-            DBManager.closeConnection();
+            if (connection != null) {
+                try {
+                    connection.setAutoCommit(true);
+                    DBManager.closeConnection();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    // Método para eliminar autores huérfanos
+    private void deleteOrphanAuthors(Connection connection) throws SQLException {
+        String SQL_DELETE_ORPHAN_AUTHORS = "DELETE FROM authors WHERE id_author NOT IN (SELECT DISTINCT id_author FROM book_author)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ORPHAN_AUTHORS)) {
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    // Método para eliminar géneros huérfanos
+    private void deleteOrphanGenres(Connection connection) throws SQLException {
+        String SQL_DELETE_ORPHAN_GENRES = "DELETE FROM genres WHERE id_genre NOT IN (SELECT DISTINCT id_genre FROM book_genre)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ORPHAN_GENRES)) {
+            preparedStatement.executeUpdate();
         }
     }
 
