@@ -6,62 +6,92 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import com.library.config.DBManager;
 import com.library.model.utils.DatabaseUtils;
 
 public class BookDAO implements BookDAOInterface {
     DatabaseUtils databaseUtils = new DatabaseUtils();
 
-    @Override
-    public List<Book>getAllBooks () {
-        List<Book> books = new ArrayList<>();
-        String query = "SELECT * FROM books"; // Ajusta la consulta según tu esquema
+   @Override
+public List<Book> getAllBooks() {
+    List<Book> books = new ArrayList<>();
+    String query = "SELECT b.id_book, b.title, b.description, b.isbn, " +
+                   "a.name AS author_name, g.name AS genre_name " +
+                   "FROM books b " +
+                   "LEFT JOIN book_author ba ON b.id_book = ba.id_book " +
+                   "LEFT JOIN authors a ON ba.id_author = a.id_author " +
+                   "LEFT JOIN book_genre bg ON b.id_book = bg.id_book " +
+                   "LEFT JOIN genres g ON bg.id_genre = g.id_genre " +
+                   "ORDER BY b.id_book ASC";
 
-        try (Connection connection = DBManager.initConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
-                ResultSet resultSet = preparedStatement.executeQuery()) {
+    try (Connection connection = DBManager.initConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(query);
+         ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            while (resultSet.next()) {
-                String title = resultSet.getString("title");
-                String description = resultSet.getString("description");
-                String isbn = resultSet.getString("isbn");
-                // Obtén los autores y géneros del libro si están en otras tablas
+        Map<Integer, Book> booksMap = new HashMap<>();
 
-                // Ejemplo simplificado:
-                Book book = new Book(title, description, isbn, new ArrayList<>(), new ArrayList<>());
-                books.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DBManager.closeConnection();
-        }
+        while (resultSet.next()) {
+            int idBook = resultSet.getInt("id_book");
+            String title = resultSet.getString("title");
+            String description = resultSet.getString("description");
+            String isbn = resultSet.getString("isbn");
+            String authorName = resultSet.getString("author_name");
+            String genreName = resultSet.getString("genre_name");
 
-        return books;
-    }
-
-    public void printTable(List<Book> books) {
-        System.out.println("---------------------------------------------------------------------");
-        System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "ID", "Title", "Description", "ISBN", "Authors",
-                "Genres");
-        System.out.println("---------------------------------------------------------------------");
-
-        for (Book book : books) {
-            String description = book.getDescription();
-            final int descriptionWidth = 50;
-            String[] lines = splitString(description, descriptionWidth);
-            String authors = String.join(", ", book.getAuthors());
-            String genres = String.join(", ", book.getGenres());
-
-            System.out.printf("%-10d %-35s %-60s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), lines[0],
-                    book.getIsbn(), authors, genres);
-            for (int i = 1; i < lines.length; i++) {
-                System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "", "");
+            Book book = booksMap.get(idBook);
+            if (book == null) {
+                List<String> authors = new ArrayList<>();
+                List<String> genres = new ArrayList<>();
+                if (authorName != null) authors.add(authorName);
+                if (genreName != null) genres.add(genreName);
+                book = new Book(idBook, title, description, isbn, authors, genres);
+                booksMap.put(idBook, book);
+            } else {
+                List<String> authors = book.getAuthors();
+                List<String> genres = book.getGenres();
+                if (authorName != null && !authors.contains(authorName)) {
+                    authors.add(authorName);
+                }
+                if (genreName != null && !genres.contains(genreName)) {
+                    genres.add(genreName);
+                }
             }
         }
-        System.out.println("---------------------------------------------------------------------");
+        books.addAll(booksMap.values());
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        DBManager.closeConnection();
     }
+
+    return books;
+}
+
+   public void printTable(List<Book> books) {
+    System.out.println("---------------------------------------------------------------------");
+    System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "ID", "Title", "Description", "ISBN", "Authors",
+            "Genres");
+    System.out.println("---------------------------------------------------------------------");
+
+    for (Book book : books) {
+        String description = book.getDescription();
+        final int descriptionWidth = 50;
+        String[] lines = splitString(description, descriptionWidth);
+        String authors = String.join(", ", book.getAuthors());
+        String genres = String.join(", ", book.getGenres());
+
+        System.out.printf("%-10d %-35s %-60s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), lines[0],
+                book.getIsbn(), authors, genres);
+        for (int i = 1; i < lines.length; i++) {
+            System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "", "");
+        }
+    }
+    System.out.println("---------------------------------------------------------------------");
+}
 
     private static String[] splitString(String str, int width) {
         if (str == null || width <= 0) {

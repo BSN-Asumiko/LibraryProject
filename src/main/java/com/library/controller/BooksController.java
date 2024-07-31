@@ -21,7 +21,7 @@ public class BooksController {
         this.authorDAOInterface = authorDAOInterface;
         this.genreDAOInterface = genreDAOInterface;
     }
-    
+
     public void getAllBooks() {
         List<Book> books = bookDAOInterface.getAllBooks();
         bookDAOInterface.printTable(books);
@@ -29,12 +29,12 @@ public class BooksController {
 
     public void addBook(Book book) {
         bookDAOInterface.insertBooktoTable(book);
-        authorDAOInterface.insertAuthortoTable(book); 
+        authorDAOInterface.insertAuthortoTable(book);
         genreDAOInterface.insertGenretoTable(book);
         bookDAOInterface.relateBookAuthor(book);
         bookDAOInterface.relateBookGenre(book);
     }
-    
+
     public void updateBookTitle(String currentTitle, String newTitle) {
         bookDAOInterface.updateBookTitle(currentTitle, newTitle);
     }
@@ -46,11 +46,16 @@ public class BooksController {
         genreDAOInterface.findGenresByBookId(idBook);
         authorDAOInterface.findAuthorsByBookId(idBook);
     }
+
     public void filterByAuthor(String author) {
         bookDAOInterface.findBooksByAuthorID(author);
     }
 
     public void filterByGenre(String genre) {
         bookDAOInterface.findBooksByGendreID(genre);
+    }
+
+    public void deleteBookByTitle(String title) {
+        bookDAOInterface.deleteBookByTitle(title);
     }
 }

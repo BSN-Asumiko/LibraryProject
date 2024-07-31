@@ -7,7 +7,7 @@ public interface BookDAOInterface {
 
     void insertBooktoTable(Book book);
 
-    void deleteBookByTitle(String title);
+    void deleteBookByTitle(String title); // Agrega esta línea
 
     void updateBookTitle(String currentTitle, String newTitle);
 
