@@ -34,7 +34,7 @@ public class LibraryView {
       System.out.println("6. Eliminar libro por titulo.");
       System.out.println("7. Modificar el titulo del libro.");
       System.out.println("8. Salir de la libreria.");
-      System.out.println("-------------------");
+      System.out.println("-------------------------------------------------------");
 
       int response = scanner.nextInt();
       scanner.nextLine();
@@ -73,32 +73,32 @@ public class LibraryView {
         List<String> authors = new ArrayList<>();
         String author1 = scanner.nextLine();
         authors.add(author1);
-        boolean next = true;
+        boolean next = false;
         while(!next){
           System.out.print("¿Este libro tiene mas autores? si/no: ");
           String answer = scanner.nextLine();
-          if (answer == "si"){
+          if (answer.equals("si")){
           System.out.print("Escribe el otro autor: ");
           String author2 = scanner.nextLine();
           authors.add(author2);
           } else {
-            next= false;
+            next= true;
           }
         }
       System.out.print("Quinto: escribe el genero o generos, uno por uno: ");
       List<String> genres = new ArrayList<>();
       String genre1 = scanner.nextLine();
       genres.add(genre1);
-      boolean follow  = true;
+      boolean follow  = false;
       while(!follow){
         System.out.print("¿Este libro tiene mas genero? si/no: ");
         String answer = scanner.nextLine();
-        if (answer == "si"){
+        if (answer.equals("si") ){
         System.out.print("Escribe el otro genero: ");
         String genre2 = scanner.nextLine();
         genres.add(genre2);
         } else {
-          follow= false;
+          follow= true;
         }
       }
       Book book = new Book(newTitle, newDescription, newIsbn, authors, genres);

@@ -1,4 +1,4 @@
-package com.library.model;
+package com.library.model.genre;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.library.config.DBManager;
+import com.library.model.book.Book;
 import com.library.model.utils.DatabaseUtils;
 
 public class GenreDAO implements GenreDAOInterface {

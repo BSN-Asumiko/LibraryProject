@@ -1,5 +1,10 @@
 package com.library;
 
+import com.library.controller.BooksController;
+import com.library.model.book.BookDAO;
+import com.library.model.book.BookDAOInterface;
+import com.library.view.LibraryView;
+
 /* import java.util.Arrays;
 import java.util.List; */
 
@@ -9,7 +14,11 @@ import java.util.List; */
 
 public class App {
     public static void main(String[] args) {
+        BookDAOInterface bookDao = new BookDAO();
+        BooksController booksController = new BooksController(bookDao);
+        LibraryView libraryView = new LibraryView(booksController);
 
+        libraryView.manageLibrary();
 /*         List<String> authors = Arrays.asList("Terry Pratchett");
         List<String> genres = Arrays.asList("Fantasy", "Comedy"); */
 

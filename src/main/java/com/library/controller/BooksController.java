@@ -2,10 +2,10 @@ package com.library.controller;
 
 import java.util.List;
 
-import com.library.model.AuthorDAOInterface;
-import com.library.model.Book;
-import com.library.model.BookDAOInterface;
-import com.library.model.GenreDAOInterface;
+import com.library.model.author.AuthorDAOInterface;
+import com.library.model.book.Book;
+import com.library.model.book.BookDAOInterface;
+import com.library.model.genre.GenreDAOInterface;
 import com.library.model.utils.DatabaseUtils;
 
 public class BooksController {

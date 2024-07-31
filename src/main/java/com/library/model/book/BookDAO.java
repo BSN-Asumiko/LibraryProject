@@ -1,4 +1,4 @@
-package com.library.model;
+package com.library.model.book;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -119,12 +119,21 @@ public class BookDAO implements BookDAOInterface {
 
     public void insertBooktoTable(Book book) {
 
+
+        String createSeqQuery = "CREATE SEQUENCE IF NOT EXISTS books_id_seq START WITH 1 INCREMENT BY 1";
+        String alterTableQuery = "ALTER TABLE books ALTER COLUMN id_book SET DEFAULT nextval('books_id_seq')";
         String maxIdQuery = "SELECT MAX(id_book) FROM books";
         String setValQuery = "SELECT setval('books_id_seq', ?, false)";
 
         try (Connection connection = DBManager.initConnection();
-                PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
-                ResultSet resultSet = maxIdStatement.executeQuery()) {
+            Statement createSeqStatement = connection.createStatement();
+            Statement alterTableStatement = connection.createStatement();
+            PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
+            ResultSet resultSet = maxIdStatement.executeQuery()) {
+
+            createSeqStatement.execute(createSeqQuery);
+
+            alterTableStatement.execute(alterTableQuery);
 
             long maxId = 0;
             if (resultSet.next()) {
@@ -309,7 +318,7 @@ public class BookDAO implements BookDAOInterface {
 
     }
 
-    // Obtener detalles del libro por id
+
     public void findBookDetailsById(int idBook) {
         String query = "SELECT title, description, isbn FROM books WHERE id_book = ?";
         Book book = null;

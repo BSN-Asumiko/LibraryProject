@@ -1,6 +1,8 @@
-package com.library.model;
+package com.library.model.author;
 
 import java.util.List;
+
+import com.library.model.book.Book;
 
 public interface AuthorDAOInterface {
     void insertAuthortoTable(Book book);
