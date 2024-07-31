@@ -107,8 +107,8 @@ public class LibraryView {
 
       case 6 :
       System.out.print("Introduce el titulo del libro que deseas eliminar: ");
-      String bookDeleted = scanner.nextLine();
-      booksController.deleteBookByTitle(bookDeleted);
+      // String bookDeleted = scanner.nextLine();
+      // booksController.deleteBookByTitle(bookDeleted);
       break;
       
       case 7:

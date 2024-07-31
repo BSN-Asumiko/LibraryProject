@@ -1,6 +1,7 @@
 package com.library.controller;
 
 import java.util.List;
+
 import com.library.model.author.AuthorDAOInterface;
 import com.library.model.book.Book;
 import com.library.model.book.BookDAOInterface;
@@ -13,7 +14,6 @@ public class BooksController {
     private AuthorDAOInterface authorDAOInterface;
     private GenreDAOInterface genreDAOInterface;
 
-    // Constructor que inicializa todas las dependencias
     public BooksController(BookDAOInterface bookDAOInterface,
             AuthorDAOInterface authorDAOInterface,
             GenreDAOInterface genreDAOInterface) {
@@ -21,27 +21,21 @@ public class BooksController {
         this.authorDAOInterface = authorDAOInterface;
         this.genreDAOInterface = genreDAOInterface;
     }
-
-    // Métodos del controlador
-    public void getAllBooks() {
+    public List<Book> getAllBooks() {
         List<Book> books = bookDAOInterface.getAllBooks();
-        bookDAOInterface.printTable(books);
+        return books;
     }
 
     public void addBook(Book book) {
         bookDAOInterface.insertBooktoTable(book);
-        authorDAOInterface.insertAuthortoTable(book);
+        authorDAOInterface.insertAuthortoTable(book); 
         genreDAOInterface.insertGenretoTable(book);
         bookDAOInterface.relateBookAuthor(book);
         bookDAOInterface.relateBookGenre(book);
     }
-
+    
     public void updateBookTitle(String currentTitle, String newTitle) {
         bookDAOInterface.updateBookTitle(currentTitle, newTitle);
-    }
-
-    public void deleteBookByTitle(String title) {
-        bookDAOInterface.deleteBookByTitle(title);
     }
 
     public void filterByTitle(String title) {
@@ -51,7 +45,6 @@ public class BooksController {
         genreDAOInterface.findGenresByBookId(idBook);
         authorDAOInterface.findAuthorsByBookId(idBook);
     }
-
     public void filterByAuthor(String author) {
         bookDAOInterface.findBooksByAuthorID(author);
     }
