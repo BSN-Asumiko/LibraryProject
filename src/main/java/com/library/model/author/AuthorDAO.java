@@ -13,6 +13,7 @@ import com.library.model.utils.DatabaseUtils;
 
 public class AuthorDAO implements AuthorDAOInterface {
     DatabaseUtils databaseUtils = new DatabaseUtils();
+
     public void insertAuthortoTable(Book book) {
 
         String maxIdQuery = "SELECT MAX(id_genre) FROM genres";
@@ -50,6 +51,7 @@ public class AuthorDAO implements AuthorDAOInterface {
             }
 
             try (Connection connection = DBManager.initConnection();
+            
                     PreparedStatement preparedStatement = connection.prepareStatement(insertAuthorQuery)) {
 
                 preparedStatement.setString(1, author);

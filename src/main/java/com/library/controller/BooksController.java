@@ -1,7 +1,6 @@
 package com.library.controller;
 
 import java.util.List;
-
 import com.library.model.author.AuthorDAOInterface;
 import com.library.model.book.Book;
 import com.library.model.book.BookDAOInterface;
@@ -14,23 +13,20 @@ public class BooksController {
     private AuthorDAOInterface authorDAOInterface;
     private GenreDAOInterface genreDAOInterface;
 
-    public BooksController(BookDAOInterface bookDAOInterface) {
+    // Constructor que inicializa todas las dependencias
+    public BooksController(BookDAOInterface bookDAOInterface,
+            AuthorDAOInterface authorDAOInterface,
+            GenreDAOInterface genreDAOInterface) {
         this.bookDAOInterface = bookDAOInterface;
-    }
-
-    public void AuthorsController(AuthorDAOInterface authorDAOInterface) {
         this.authorDAOInterface = authorDAOInterface;
-    }
-
-    public void GenresController(GenreDAOInterface genreDAOInterface) {
         this.genreDAOInterface = genreDAOInterface;
     }
 
-    public void  getAllBooks() {
+    // Métodos del controlador
+    public void getAllBooks() {
         List<Book> books = bookDAOInterface.getAllBooks();
         bookDAOInterface.printTable(books);
     }
-
 
     public void addBook(Book book) {
         bookDAOInterface.insertBooktoTable(book);
@@ -43,6 +39,7 @@ public class BooksController {
     public void updateBookTitle(String currentTitle, String newTitle) {
         bookDAOInterface.updateBookTitle(currentTitle, newTitle);
     }
+
     public void deleteBookByTitle(String title) {
         bookDAOInterface.deleteBookByTitle(title);
     }

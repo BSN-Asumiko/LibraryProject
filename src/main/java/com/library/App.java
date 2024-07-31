@@ -1,8 +1,12 @@
 package com.library;
 
 import com.library.controller.BooksController;
+import com.library.model.author.AuthorDAO;
+import com.library.model.author.AuthorDAOInterface;
 import com.library.model.book.BookDAO;
 import com.library.model.book.BookDAOInterface;
+import com.library.model.genre.GenreDAO;
+import com.library.model.genre.GenreDAOInterface;
 import com.library.view.LibraryView;
 
 /* import java.util.Arrays;
@@ -14,8 +18,12 @@ import java.util.List; */
 
 public class App {
     public static void main(String[] args) {
-        BookDAOInterface bookDao = new BookDAO();
-        BooksController booksController = new BooksController(bookDao);
+      BookDAOInterface bookDAO = new BookDAO();
+AuthorDAOInterface authorDAO = new AuthorDAO();
+GenreDAOInterface genreDAO = new GenreDAO();
+
+BooksController booksController = new BooksController(bookDAO, authorDAO, genreDAO);
+
         LibraryView libraryView = new LibraryView(booksController);
 
         libraryView.manageLibrary();
