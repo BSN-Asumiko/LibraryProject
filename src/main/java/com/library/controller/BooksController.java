@@ -26,10 +26,11 @@ public class BooksController {
         this.genreDAOInterface = genreDAOInterface;
     }
 
-    public List<Book> getAllBooks() {
+    public void  getAllBooks() {
         List<Book> books = bookDAOInterface.getAllBooks();
-        return books;
+        bookDAOInterface.printTable(books);
     }
+
 
     public void addBook(Book book) {
         bookDAOInterface.insertBooktoTable(book);
@@ -41,6 +42,9 @@ public class BooksController {
 
     public void updateBookTitle(String currentTitle, String newTitle) {
         bookDAOInterface.updateBookTitle(currentTitle, newTitle);
+    }
+    public void deleteBookByTitle(String title) {
+        bookDAOInterface.deleteBookByTitle(title);
     }
 
     public void filterByTitle(String title) {

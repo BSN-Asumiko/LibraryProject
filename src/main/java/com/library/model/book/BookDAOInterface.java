@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface BookDAOInterface {
     List<Book> getAllBooks();
+    void printTable(List<Book> books);
     void insertBooktoTable(Book book);
     void relateBookGenre(Book book);
     void relateBookAuthor(Book book);
@@ -12,5 +13,6 @@ public interface BookDAOInterface {
     void findBookDetailsById(int idBook);
     void findBooksByAuthorID(String author);
     void findBooksByGendreID(String genre);
+
 
 }

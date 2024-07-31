@@ -68,7 +68,7 @@ public class BookDAO implements BookDAOInterface {
         return new ArrayList<>(booksMap.values());
     }
 
-    public static void printTable(List<Book> books) {
+    public void printTable(List<Book> books) {
 
         System.out.println(
                 "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
