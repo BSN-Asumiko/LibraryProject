@@ -48,11 +48,13 @@ public class BooksController {
     }
 
     public void filterByAuthor(String author) {
-        bookDAOInterface.findBooksByAuthorID(author);
+        List<Book> books = bookDAOInterface.findBooksByAuthorID(author);
+        bookDAOInterface.printTable(books);
     }
 
     public void filterByGenre(String genre) {
-        bookDAOInterface.findBooksByGendreID(genre);
+        List<Book> books = bookDAOInterface.findBooksByGendreID(genre);
+        bookDAOInterface.printTable(books);
     }
 
     public void deleteBookByTitle(String title) {

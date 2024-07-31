@@ -394,9 +394,10 @@ public class BookDAO implements BookDAOInterface {
         System.out.println("ISBN: " + book.getIsbn());
     }
 
+    @Override
     public List<Book> findBooksByAuthorID(String author) {
         int idAuthor = databaseUtils.findIdByValue("id_author", "authors", "name", author);
-        String query = "SELECT b.id_book, b.title, b.description, b.isbn FROM book_author ba JOIN books b on ba.id_book = b.id_book WHERE ba.id_author = ?";
+        String query = "SELECT b.id_book, b.title, b.description, b.isbn FROM book_author ba JOIN books b ON ba.id_book = b.id_book WHERE ba.id_author = ?";
         List<Book> books = new ArrayList<>();
 
         try (Connection conn = DBManager.initConnection();
@@ -428,9 +429,10 @@ public class BookDAO implements BookDAOInterface {
         return books;
     }
 
+    @Override
     public List<Book> findBooksByGendreID(String genre) {
         int idGenre = databaseUtils.findIdByValue("id_genre", "genres", "name", genre);
-        String query = "SELECT b.id_book, b.title, b.description, b.isbn FROM book_genre bg JOIN books b on bg.id_book = b.id_book WHERE bg.id_genre = ?";
+        String query = "SELECT b.id_book, b.title, b.description, b.isbn FROM book_genre bg JOIN books b ON bg.id_book = b.id_book WHERE bg.id_genre = ?";
         List<Book> books = new ArrayList<>();
 
         try (Connection conn = DBManager.initConnection();

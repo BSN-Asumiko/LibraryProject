@@ -23,7 +23,7 @@ public class LibraryView {
       System.out.println("2. Buscar libro por titulo.");
       System.out.println("3. Buscar libro por autor.");
       System.out.println("4. Buscar libro por genero.");
-      System.err.println("5. Añadir un libro.");
+      System.out.println("5. Añadir un libro.");
       System.out.println("6. Eliminar libro por titulo.");
       System.out.println("7. Modificar el titulo del libro.");
       System.out.println("8. Salir de la libreria.");
