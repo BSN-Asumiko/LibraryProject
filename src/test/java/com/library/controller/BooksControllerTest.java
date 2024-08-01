@@ -13,6 +13,8 @@ import com.library.model.book.BookDAOInterface;
 import com.library.model.genre.GenreDAOInterface;
 import com.library.model.utils.DatabaseUtils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -88,5 +90,31 @@ public class BooksControllerTest {
             verify(bookDAOInterface, never()).relateBookGenre(book);
         }
     }
+
+    @Test
+    public void testDeleteBookByTitle_BookExists() throws Exception {
+        
+        String title = "Existing Book";
+
+        doNothing().when(bookDAOInterface).deleteBookByTitle(title);
+        booksController.deleteBookByTitle(title);
+
+        verify(bookDAOInterface, times(1)).deleteBookByTitle(title);
+    }
+
+    @Test
+    public void testDeleteBookByTitle_BookDoesNotExist() {
+
+    String nonExistingTitle = "Non-Existing Book";
+
+    doThrow(new RuntimeException("Book not found")).when(bookDAOInterface).deleteBookByTitle(nonExistingTitle);
+
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        booksController.deleteBookByTitle(nonExistingTitle);
+    });
+    
+    assertEquals("Book not found", exception.getMessage());
+    verify(bookDAOInterface, times(1)).deleteBookByTitle(nonExistingTitle);
+}
 
 }
