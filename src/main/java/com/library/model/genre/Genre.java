@@ -1,4 +1,4 @@
-package com.library.model;
+package com.library.model.genre;
 
 public class Genre {
     private int id_genre;

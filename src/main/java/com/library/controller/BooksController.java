@@ -1,11 +1,12 @@
 package com.library.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.library.model.AuthorDAOInterface;
-import com.library.model.Book;
-import com.library.model.BookDAOInterface;
-import com.library.model.GenreDAOInterface;
+import com.library.model.author.AuthorDAOInterface;
+import com.library.model.book.Book;
+import com.library.model.book.BookDAOInterface;
+import com.library.model.genre.GenreDAOInterface;
 import com.library.model.utils.DatabaseUtils;
 
 public class BooksController {
@@ -14,21 +15,21 @@ public class BooksController {
     private AuthorDAOInterface authorDAOInterface;
     private GenreDAOInterface genreDAOInterface;
 
-    public BooksController(BookDAOInterface bookDAOInterface) {
+    public BooksController(BookDAOInterface bookDAOInterface,
+            AuthorDAOInterface authorDAOInterface,
+            GenreDAOInterface genreDAOInterface) {
         this.bookDAOInterface = bookDAOInterface;
-    }
-
-    public void AuthorsController(AuthorDAOInterface authorDAOInterface) {
         this.authorDAOInterface = authorDAOInterface;
-    }
-
-    public void GenresController(GenreDAOInterface genreDAOInterface) {
         this.genreDAOInterface = genreDAOInterface;
     }
 
-    public List<Book> getAllBooks() {
+    public void getAllBooks() {
         List<Book> books = bookDAOInterface.getAllBooks();
-        return books;
+        if (books.isEmpty()) {
+            System.out.println("La base de datos está vacia");
+        } else {
+        bookDAOInterface.printTable(books);
+        }
     }
 
     public void addBook(Book book) {
@@ -46,16 +47,62 @@ public class BooksController {
     public void filterByTitle(String title) {
         DatabaseUtils databaseUtils = new DatabaseUtils();
         int idBook = databaseUtils.findIdByValue("id_book", "books", "title", title);
-        bookDAOInterface.findBookDetailsById(idBook);
-        genreDAOInterface.findGenresByBookId(idBook);
-        authorDAOInterface.findAuthorsByBookId(idBook);
+        Book filteredBook = bookDAOInterface.findBookDetailsById(idBook);
+
+        String foundTitle = filteredBook.getTitle();
+        String foundDescription = filteredBook.getDescription();
+        String foundIsbn = filteredBook.getIsbn();
+        List<String> foundAuthors = authorDAOInterface.findAuthorsByBookId(idBook);
+        List<String> foundGenres = genreDAOInterface.findGenresByBookId(idBook);
+
+        Book foundBook = new Book(idBook, foundTitle, foundDescription, foundIsbn, foundAuthors, foundGenres);
+        List<Book> foundBooks = new ArrayList<>();
+        foundBooks.add(foundBook);
+        bookDAOInterface.printTable(foundBooks);
     }
 
     public void filterByAuthor(String author) {
-        bookDAOInterface.findBooksByAuthorID(author);
+        List<Book> books = bookDAOInterface.findBooksByAuthorID(author);
+        
+        if (books.isEmpty()) {
+            System.out.println("El autor introducido no existe en la base de datos");
+        } else {
+            List<Book> filteredBooks = new ArrayList<>();
+        for (Book book : books) {
+            int idBook = book.getId();
+            String title = book.getTitle();
+            String description = book.getDescription();
+            String isbn = book.getIsbn();
+            List<String> authors = authorDAOInterface.findAuthorsByBookId(idBook);
+            List<String> genres = genreDAOInterface.findGenresByBookId(idBook);
+            Book filteredBook = new Book(idBook, title, description, isbn, authors, genres);
+            filteredBooks.add(filteredBook);
+        }
+        bookDAOInterface.printTable(filteredBooks);
+        }
     }
 
     public void filterByGenre(String genre) {
-        bookDAOInterface.findBooksByGendreID(genre);
+        List<Book> books = bookDAOInterface.findBooksByGendreID(genre);
+        if (books.isEmpty()) {
+            System.out.println("El genero introducido no existe en la base de datos");
+        } else {
+            List<Book> filteredBooks = new ArrayList<>();
+            for (Book book : books) {
+                int idBook = book.getId();
+                String title = book.getTitle();
+                String description = book.getDescription();
+                String isbn = book.getIsbn();
+                List<String> authors = authorDAOInterface.findAuthorsByBookId(idBook);
+                List<String> genres = genreDAOInterface.findGenresByBookId(idBook);
+                Book filteredBook = new Book(idBook, title, description, isbn, authors, genres);
+                filteredBooks.add(filteredBook);
+            }
+            bookDAOInterface.printTableWithoutDescription(filteredBooks);
+        }
+    }
+
+    public void deleteBookByTitle(String title) {
+        bookDAOInterface.deleteBookByTitle(title);
     }
 }
