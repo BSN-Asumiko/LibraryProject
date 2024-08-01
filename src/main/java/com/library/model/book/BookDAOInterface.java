@@ -17,7 +17,9 @@ public interface BookDAOInterface {
 
     void printTable(List<Book> books);
 
-    void findBookDetailsById(int idBook);
+    void printTableWithoutDescription(List<Book> books);
+
+    Book findBookDetailsById(int idBook);
 
     List<Book> findBooksByAuthorID(String author);
 

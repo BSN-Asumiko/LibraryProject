@@ -74,10 +74,10 @@ public class BookDAO implements BookDAOInterface {
     }
 
     public void printTable(List<Book> books) {
-        System.out.println("---------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "ID", "Title", "Description", "ISBN", "Authors",
                 "Genres");
-        System.out.println("---------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
         for (Book book : books) {
             String description = book.getDescription();
@@ -92,7 +92,24 @@ public class BookDAO implements BookDAOInterface {
                 System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "", "", lines[i], "", "", "");
             }
         }
-        System.out.println("---------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    public void printTableWithoutDescription(List<Book> books) {
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-10s %-35s %-20s %-40s %-20s\n", "ID", "Title", "ISBN", "Authors",
+                "Genres");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        for (Book book : books) {
+            
+            String authors = String.join(", ", book.getAuthors());
+            String genres = String.join(", ", book.getGenres());
+
+            System.out.printf("%-10d %-35s %-20s %-40s %-20s\n", book.getId(), book.getTitle(), 
+                    book.getIsbn(), authors, genres);
+        }
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     private static String[] splitString(String str, int width) {
@@ -112,6 +129,8 @@ public class BookDAO implements BookDAOInterface {
 
         return lines;
     }
+
+    
 
     public void insertBooktoTable(Book book) {
 
@@ -367,7 +386,7 @@ public class BookDAO implements BookDAOInterface {
         }
     }
 
-    public void findBookDetailsById(int idBook) {
+    public Book findBookDetailsById(int idBook) {
         String query = "SELECT title, description, isbn FROM books WHERE id_book = ?";
         Book book = null;
 
@@ -389,9 +408,8 @@ public class BookDAO implements BookDAOInterface {
         } finally {
             DBManager.closeConnection();
         }
-        System.out.println("Title: " + book.getTitle());
-        System.out.println("Description: " + book.getDescription());
-        System.out.println("ISBN: " + book.getIsbn());
+
+        return book;
     }
 
     @Override

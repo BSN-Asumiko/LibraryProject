@@ -80,12 +80,6 @@ public class AuthorDAO implements AuthorDAOInterface {
     }
 
     @Override
-    public void printAuthorsDetails(int idBook) {
-        List<String> authors = findAuthorsByBookId(idBook);
-        System.out.println("Authors: " + String.join(", ", authors));
-    }
-
-    @Override
     public int findAuthorIDByAuthorName(String author) {
         DatabaseUtils databaseUtils = new DatabaseUtils();
         return databaseUtils.findIdByValue("id_author", "authors", "name", author);

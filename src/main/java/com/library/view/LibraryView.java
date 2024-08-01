@@ -18,6 +18,7 @@ public class LibraryView {
     Scanner scanner = new Scanner(System.in);
 
     while (true) {
+      System.out.println("");
       System.out.println("Bienvenido a nuestra Libreria, ¿Que te gustaría hacer? ");
       System.out.println("1. Ver listado completo de libros.");
       System.out.println("2. Buscar libro por titulo.");

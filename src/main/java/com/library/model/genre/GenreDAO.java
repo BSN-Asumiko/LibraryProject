@@ -54,7 +54,7 @@ public class GenreDAO implements GenreDAOInterface {
     }
 
     @Override
-    public void findGenresByBookId(int idBook) {
+    public List<String> findGenresByBookId(int idBook) {
         String query = "SELECT g.name FROM book_genre bg JOIN genres g ON bg.id_genre = g.id_genre WHERE bg.id_book = ?";
         List<String> genres = new ArrayList<>();
 
@@ -77,6 +77,6 @@ public class GenreDAO implements GenreDAOInterface {
             DBManager.closeConnection();
         }
 
-        System.out.println("Genres: " + String.join(", ", genres));
+        return genres;
     }
 }
