@@ -9,4 +9,5 @@ public interface AuthorDAOInterface {
 
     List<String> findAuthorsByBookId(int idBook);
     int findAuthorIDByAuthorName(String author);
+    void deleteOrphanAuthors( );
 }

@@ -108,6 +108,10 @@ public class BooksController {
     }
 
     public void deleteBookByTitle(String title) {
+        
         bookDAOInterface.deleteBookByTitle(title);
+        authorDAOInterface.deleteOrphanAuthors();
+        genreDAOInterface.deleteOrphanGenres();
+
     }
 }
