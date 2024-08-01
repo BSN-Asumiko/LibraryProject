@@ -9,7 +9,7 @@ public class DBManager {
     
     private static final Dotenv dotenv = Dotenv.load();
     private static Connection connection;
-    private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/library";
+    private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/library?charSet=UTF8";
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = dotenv.get("PASSWORD");
 
@@ -17,8 +17,7 @@ public class DBManager {
     public static Connection initConnection() {
         try {
             connection = DriverManager.getConnection(JDBC_URL, USERNAME,  PASSWORD);
-            System.out.println("\033[0;32m" + "¡Conectado con éxito!" + "\033[0m");
-            
+        
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -28,7 +27,6 @@ public class DBManager {
     public static void closeConnection() {
         try {
             connection.close();
-            System.out.println("\033[0;32m" + "Has salido correctamente del sistema" + "\033[0m");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
