@@ -8,24 +8,20 @@ import java.sql.SQLException;
 import com.library.config.DBManager;
 
 public class DatabaseUtils {
-
     public static boolean checkExisting(String table, String column, String value) {
-
         String query = "SELECT 1 FROM " + table + " WHERE " + column + " = ? LIMIT 1";
-
         try (Connection connection = DBManager.initConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
             preparedStatement.setString(1, value);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.next(); // If there is a result, the value exists
+                return resultSet.next();
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             DBManager.closeConnection();
         }
+        return false;
     }
 
     public int findIdByValue(String idName, String table, String columnName, String searchValue) {
@@ -34,9 +30,7 @@ public class DatabaseUtils {
 
         try (Connection connection = DBManager.initConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
             preparedStatement.setString(1, searchValue);
-
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     id = resultSet.getInt(idName);
@@ -54,5 +48,4 @@ public class DatabaseUtils {
 
         return id;
     }
-
 }
