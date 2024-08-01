@@ -11,6 +11,7 @@ import com.library.model.utils.DatabaseUtils;
 
 public class BooksController {
 
+    DatabaseUtils databaseUtils = new DatabaseUtils();
     private BookDAOInterface bookDAOInterface;
     private AuthorDAOInterface authorDAOInterface;
     private GenreDAOInterface genreDAOInterface;
@@ -33,6 +34,11 @@ public class BooksController {
     }
 
     public void addBook(Book book) {
+        boolean bookExists = DatabaseUtils.checkExisting("books", "title", book.getTitle());
+        if (bookExists) {
+            System.out.println("A book with this title already exists in the table 'books'.");
+            return;
+        }
         bookDAOInterface.insertBooktoTable(book);
         authorDAOInterface.insertAuthortoTable(book);
         genreDAOInterface.insertGenretoTable(book);
@@ -45,7 +51,7 @@ public class BooksController {
     }
 
     public void filterByTitle(String title) {
-        DatabaseUtils databaseUtils = new DatabaseUtils();
+        
         int idBook = databaseUtils.findIdByValue("id_book", "books", "title", title);
         if (idBook == -1) {
             System.out.println("El libro introducido no existe en la base de datos");
