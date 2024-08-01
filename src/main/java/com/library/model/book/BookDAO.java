@@ -75,7 +75,7 @@ public class BookDAO implements BookDAOInterface {
 
     public void printTable(List<Book> books) {
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "ID", "Title", "Description", "ISBN", "Authors",
+        System.out.printf("%-10s %-35s %-60s %-20s %-40s %-20s\n", "ID", "Título", "Descripción", "ISBN", "Autor",
                 "Genres");
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
