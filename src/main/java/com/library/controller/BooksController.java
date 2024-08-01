@@ -47,18 +47,23 @@ public class BooksController {
     public void filterByTitle(String title) {
         DatabaseUtils databaseUtils = new DatabaseUtils();
         int idBook = databaseUtils.findIdByValue("id_book", "books", "title", title);
-        Book filteredBook = bookDAOInterface.findBookDetailsById(idBook);
+        if (idBook == -1) {
+            System.out.println("El libro introducido no existe en la base de datos");
+        } else {
+            Book filteredBook = bookDAOInterface.findBookDetailsById(idBook);
 
-        String foundTitle = filteredBook.getTitle();
-        String foundDescription = filteredBook.getDescription();
-        String foundIsbn = filteredBook.getIsbn();
-        List<String> foundAuthors = authorDAOInterface.findAuthorsByBookId(idBook);
-        List<String> foundGenres = genreDAOInterface.findGenresByBookId(idBook);
+            String foundTitle = filteredBook.getTitle();
+            String foundDescription = filteredBook.getDescription();
+            String foundIsbn = filteredBook.getIsbn();
+            List<String> foundAuthors = authorDAOInterface.findAuthorsByBookId(idBook);
+            List<String> foundGenres = genreDAOInterface.findGenresByBookId(idBook);
 
-        Book foundBook = new Book(idBook, foundTitle, foundDescription, foundIsbn, foundAuthors, foundGenres);
-        List<Book> foundBooks = new ArrayList<>();
-        foundBooks.add(foundBook);
-        bookDAOInterface.printTable(foundBooks);
+            Book foundBook = new Book(idBook, foundTitle, foundDescription, foundIsbn, foundAuthors, foundGenres);
+            List<Book> foundBooks = new ArrayList<>();
+            foundBooks.add(foundBook);
+            bookDAOInterface.printTable(foundBooks);
+        }
+        
     }
 
     public void filterByAuthor(String author) {
