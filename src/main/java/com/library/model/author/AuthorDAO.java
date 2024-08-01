@@ -84,4 +84,17 @@ public class AuthorDAO implements AuthorDAOInterface {
         DatabaseUtils databaseUtils = new DatabaseUtils();
         return databaseUtils.findIdByValue("id_author", "authors", "name", author);
     }
+
+    @Override
+    public void deleteOrphanAuthors()  {
+        String SQL_DELETE_ORPHAN_AUTHORS = "DELETE FROM authors WHERE id_author NOT IN (SELECT DISTINCT id_author FROM book_author)";
+        Connection connection = DBManager.initConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ORPHAN_AUTHORS)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeConnection();
+        }
+    }
 }

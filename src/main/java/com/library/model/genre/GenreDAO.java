@@ -79,4 +79,17 @@ public class GenreDAO implements GenreDAOInterface {
 
         return genres;
     }
+
+    public void deleteOrphanGenres()  {
+        String SQL_DELETE_ORPHAN_GENRES = "DELETE FROM genres WHERE id_genre NOT IN (SELECT DISTINCT id_genre FROM book_genre)";
+
+        Connection connection = DBManager.initConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ORPHAN_GENRES)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeConnection();
+        }
+    }
 }
