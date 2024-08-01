@@ -58,4 +58,25 @@ public class Book {
     public List<String> getGenres() {
         return genres;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
+    }
+
 }

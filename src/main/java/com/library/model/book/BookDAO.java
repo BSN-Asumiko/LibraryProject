@@ -166,13 +166,7 @@ public class BookDAO implements BookDAOInterface {
         }
 
         String insertBookQuery = "INSERT INTO books (title, description, isbn) VALUES (?, ?, ?)";
-        boolean bookExists = DatabaseUtils.checkExisting("books", "title", book.getTitle());
-
-        if (bookExists) {
-            System.out.println("A book with this title already exists in the table 'books'.");
-            return;
-        }
-
+    
         try (Connection connection = DBManager.initConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(insertBookQuery)) {
 
