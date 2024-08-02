@@ -35,11 +35,12 @@ In the VS Code Terminal (Ctrl + ño Terminal > New Terminal) we write the follow
 $ git clone (copied link)
 
 cd ../path/to/the/file
+
 4. Create a PostgreSQL database.
 
 5. Update the src/main/resources/application.properties file with your database credentials.
-6. 
-7. Configuring the JAVA_HOME environment variable is an essential step for Java development and ensuring that your system and various tools (like Maven) can locate your Java installation.
+ 
+6. Configuring the JAVA_HOME environment variable is an essential step for Java development and ensuring that your system and various tools (like Maven) can locate your Java installation.
 
 Below are the steps to configure JAVA_HOME for different operating systems:
 
