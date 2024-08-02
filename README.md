@@ -153,7 +153,7 @@ We click on the 'Run Java' play button in the App.java document
 
 ## How to run the tests
 
-Having the 'Extension Pack for Java' extension in VSC, and Maven installed, write to console 'mvn test'
+Having the 'Extension Pack for Java' extension in VSC, and Maven installed,  click the laboratory symbol and the play button
 
 ## Integrants
 
