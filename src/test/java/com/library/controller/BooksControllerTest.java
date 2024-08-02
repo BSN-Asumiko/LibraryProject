@@ -15,8 +15,11 @@ import com.library.model.utils.DatabaseUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +33,10 @@ public class BooksControllerTest {
 
     @Mock
     private GenreDAOInterface genreDAOInterface;
+
+    @Mock
+    private DatabaseUtils databaseUtils;
+
 
     @InjectMocks
     private BooksController booksController;
@@ -117,4 +124,55 @@ public class BooksControllerTest {
     verify(bookDAOInterface, times(1)).deleteBookByTitle(nonExistingTitle);
 }
 
+    @Test
+    public void testFilterByAuthorAuthorExists() {
+        String author = "Test Author";
+        List<Book> books = new ArrayList<>();
+        books.add(new Book(1, "Title", "Description", "ISBN", new ArrayList<>(), new ArrayList<>()));
+
+        when(bookDAOInterface.findBooksByAuthorID(author)).thenReturn(books);
+        when(authorDAOInterface.findAuthorsByBookId(anyInt())).thenReturn(new ArrayList<>());
+        when(genreDAOInterface.findGenresByBookId(anyInt())).thenReturn(new ArrayList<>());
+
+        booksController.filterByAuthor(author);
+
+        verify(bookDAOInterface).printTable(anyList());
+    }
+
+    @Test
+    public void testFilterByAuthorAuthorDoesNotExist() {
+        String author = "Nonexistent Author";
+
+        when(bookDAOInterface.findBooksByAuthorID(author)).thenReturn(new ArrayList<>());
+
+        booksController.filterByAuthor(author);
+
+        verify(bookDAOInterface, never()).printTable(anyList());
+    }
+
+    @Test
+    public void testFilterByGenreGenreExists() {
+        String genre = "Test Genre";
+        List<Book> books = new ArrayList<>();
+        books.add(new Book(1, "Title", "Description", "ISBN", new ArrayList<>(), new ArrayList<>()));
+
+        when(bookDAOInterface.findBooksByGendreID(genre)).thenReturn(books);
+        when(authorDAOInterface.findAuthorsByBookId(anyInt())).thenReturn(new ArrayList<>());
+        when(genreDAOInterface.findGenresByBookId(anyInt())).thenReturn(new ArrayList<>());
+
+        booksController.filterByGenre(genre);
+
+        verify(bookDAOInterface).printTableWithoutDescription(anyList());
+    }
+
+    @Test
+    public void testFilterByGenreGenreDoesNotExist() {
+        String genre = "Nonexistent Genre";
+
+        when(bookDAOInterface.findBooksByGendreID(genre)).thenReturn(new ArrayList<>());
+
+        booksController.filterByGenre(genre);
+
+        verify(bookDAOInterface, never()).printTableWithoutDescription(anyList());
+    }
 }
