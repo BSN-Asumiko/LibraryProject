@@ -52,15 +52,7 @@ public class BooksControllerTest {
     @Test
     public void testAddBook() {
 
-        /*
-         * String title = "New Book";
-         * String description = "A new book description";
-         * String Isbn = "123456789";
-         * List<String> authors = List.of("Author1", "Author2");
-         * List<String> genres = List.of("Genre1", "Genre2");
-         * 
-         * Book book = new Book(title, description, Isbn, authors, genres);
-         */
+
 
         booksController.addBook(book);
 
@@ -74,15 +66,6 @@ public class BooksControllerTest {
     @Test
     public void testAddBook_BookAlreadyExists() throws Exception {
 
-        /*
-         * String title = "New Book";
-         * String description = "A new book description";
-         * String Isbn = "123456789";
-         * List<String> authors = List.of("Author1", "Author2");
-         * List<String> genres = List.of("Genre1", "Genre2");
-         * 
-         * Book book = new Book(title, description, Isbn, authors, genres);
-         */
 
         try (MockedStatic<DatabaseUtils> bookExists = mockStatic(DatabaseUtils.class)) {
             bookExists.when(() -> DatabaseUtils.checkExisting("books", "title", book.getTitle()))
