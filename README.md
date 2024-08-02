@@ -24,26 +24,26 @@ Search Books: Search for books by author, genre, or title.
 
 ## Setup Instructions
 
-Access the online repository page
+1. Access the online repository page
 
-Copy the repository URL that appears when accessing the Code button
+2. Copy the repository URL that appears when accessing the Code button
 
-Enter VS Code
+3. Enter VS Code
 
 In the VS Code Terminal (Ctrl + ño Terminal > New Terminal) we write the following:
 
 $ git clone (copied link)
 
 cd ../path/to/the/file
-Create a PostgreSQL database.
-Update the src/main/resources/application.properties file with your database credentials.
-Configuring the JAVA_HOME environment variable is an essential step for Java development and ensuring that your system and various tools (like Maven) can locate your Java installation.
+4. Create a PostgreSQL database.
 
-Paste the dependencies on 'pom.xml' file.
+5. Update the src/main/resources/application.properties file with your database credentials.
+6. 
+7. Configuring the JAVA_HOME environment variable is an essential step for Java development and ensuring that your system and various tools (like Maven) can locate your Java installation.
 
 Below are the steps to configure JAVA_HOME for different operating systems:
 
-Windows
+* Windows
 Determine the Java installation path:
 
 Locate the directory where Java is installed. Typically, it is something like C:\Program Files\Java\jdk-11.x.x.
@@ -72,7 +72,7 @@ sh
 
 java -version
 This should display the installed Java version.
-macOS
+* macOS
 Determine the Java installation path:
 
 Run the following command in Terminal to find your Java installation path:
@@ -106,7 +106,8 @@ sh
 
 java -version
 This should display the installed Java version.
-Linux (Ubuntu/Debian)
+
+* Linux (Ubuntu/Debian)
 Determine the Java installation path:
 
 Typically, Java is installed in /usr/lib/jvm. You can list the contents of this directory to find the correct path:
@@ -141,7 +142,6 @@ sh
 
 java -version
 This should display the installed Java version.
-By following these steps, you will have configured the JAVA_HOME environment variable on your system, ensuring that Java and related tools can locate the Java Development Kit (JDK) properly.
 
 ## How to view data by console
 
