@@ -166,13 +166,7 @@ public class BookDAO implements BookDAOInterface {
         }
 
         String insertBookQuery = "INSERT INTO books (title, description, isbn) VALUES (?, ?, ?)";
-        boolean bookExists = DatabaseUtils.checkExisting("books", "title", book.getTitle());
-
-        if (bookExists) {
-            System.out.println("A book with this title already exists in the table 'books'.");
-            return;
-        }
-
+    
         try (Connection connection = DBManager.initConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(insertBookQuery)) {
 
@@ -312,23 +306,21 @@ public class BookDAO implements BookDAOInterface {
 
         try {
             connection = DBManager.initConnection();
-            connection.setAutoCommit(false); // Iniciar transacción
+            connection.setAutoCommit(false); 
 
-            // Eliminar referencias en book_genre
+
             String SQL_DELETE_GENRE = "DELETE FROM book_genre WHERE id_book = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_GENRE)) {
                 preparedStatement.setInt(1, bookId);
                 preparedStatement.executeUpdate();
             }
 
-            // Eliminar referencias en book_author
             String SQL_DELETE_AUTHOR = "DELETE FROM book_author WHERE id_book = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_AUTHOR)) {
                 preparedStatement.setInt(1, bookId);
                 preparedStatement.executeUpdate();
             }
 
-            // Eliminar el libro en books
             String SQL_DELETE_BOOK = "DELETE FROM books WHERE id_book = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BOOK)) {
                 preparedStatement.setInt(1, bookId);
@@ -340,17 +332,12 @@ public class BookDAO implements BookDAOInterface {
                     System.out.println("No se ha encontrado ningún libro con ese título");
                 }
             }
-
-            // Eliminar autores y géneros no referenciados
-            deleteOrphanAuthors(connection);
-            deleteOrphanGenres(connection);
-
-            connection.commit(); // Confirmar transacción
+            connection.commit(); 
 
         } catch (SQLException e) {
             if (connection != null) {
                 try {
-                    connection.rollback(); // Revertir cambios en caso de error
+                    connection.rollback(); 
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -367,22 +354,6 @@ public class BookDAO implements BookDAOInterface {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    // Método para eliminar autores huérfanos
-    private void deleteOrphanAuthors(Connection connection) throws SQLException {
-        String SQL_DELETE_ORPHAN_AUTHORS = "DELETE FROM authors WHERE id_author NOT IN (SELECT DISTINCT id_author FROM book_author)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ORPHAN_AUTHORS)) {
-            preparedStatement.executeUpdate();
-        }
-    }
-
-    // Método para eliminar géneros huérfanos
-    private void deleteOrphanGenres(Connection connection) throws SQLException {
-        String SQL_DELETE_ORPHAN_GENRES = "DELETE FROM genres WHERE id_genre NOT IN (SELECT DISTINCT id_genre FROM book_genre)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ORPHAN_GENRES)) {
-            preparedStatement.executeUpdate();
         }
     }
 
