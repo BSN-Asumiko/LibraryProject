@@ -45,6 +45,7 @@ cd ../path/to/the/file
 Below are the steps to configure JAVA_HOME for different operating systems:
 
 * Windows
+  
 Determine the Java installation path:
 
 Locate the directory where Java is installed. Typically, it is something like C:\Program Files\Java\jdk-11.x.x.
@@ -74,6 +75,7 @@ sh
 java -version
 This should display the installed Java version.
 * macOS
+  
 Determine the Java installation path:
 
 Run the following command in Terminal to find your Java installation path:
@@ -109,6 +111,7 @@ java -version
 This should display the installed Java version.
 
 * Linux (Ubuntu/Debian)
+  
 Determine the Java installation path:
 
 Typically, Java is installed in /usr/lib/jvm. You can list the contents of this directory to find the correct path:
