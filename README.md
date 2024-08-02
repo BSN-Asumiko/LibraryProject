@@ -17,6 +17,7 @@ Search Books: Search for books by author, genre, or title.
 - Java V.17
 - Junit V.4.11
 - Maven V.3.9.8
+- PostgreSQL 42.7.3
 - PgAdmin 4
 
 ## Setup Instructions
