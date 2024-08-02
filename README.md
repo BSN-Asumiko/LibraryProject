@@ -14,23 +14,34 @@ Search Books: Search for books by author, genre, or title.
 
 ## Used technologies
 
-- Java V.17
-- Junit V.4.11
-- Maven V.3.9.8
-- PostgreSQL 42.7.3
+- Java V. 17
+- Junit V. 4.11
+- Maven V. 3.9.8
+- PostgreSQL V. 42.7.3
 - PgAdmin 4
+- Mockito V. 5.12
+- Mockito Core V. 5.12
 
 ## Setup Instructions
 
 Access the online repository page
+
 Copy the repository URL that appears when accessing the Code button
+
 Enter VS Code
+
 In the VS Code Terminal (Ctrl + ño Terminal > New Terminal) we write the following:
+
 $ git clone (copied link)
+
 cd ../path/to/the/file
 Create a PostgreSQL database.
 Update the src/main/resources/application.properties file with your database credentials.
-Configuring the JAVA_HOME environment variable is an essential step for Java development and ensuring that your system and various tools (like Maven) can locate your Java installation. Below are the steps to configure JAVA_HOME for different operating systems:
+Configuring the JAVA_HOME environment variable is an essential step for Java development and ensuring that your system and various tools (like Maven) can locate your Java installation.
+
+Paste the dependencies on 'pom.xml' file.
+
+Below are the steps to configure JAVA_HOME for different operating systems:
 
 Windows
 Determine the Java installation path:
@@ -145,4 +156,5 @@ Having the 'Extension Pack for Java' extension in VSC, and Maven installed, writ
 - https://github.com/flaviferri
 - https://github.com/Adrianaortiz00
 - https://github.com/BSN-Asumiko
+- https://github.com/Lauraa23
 - https://github.com/indiakka
